@@ -1,0 +1,47 @@
+navbar
+	Home
+	Sobre
+	Análise exploratória
+	Kaplan-Meier
+		Tabela de Sobrevivência
+	Estimação não paramétrica da função de risco
+	Modelo de Regressão de Cox
+	Análise da Suposição de Riscos Proporcionais
+
+
+Home
+	Título
+	Imagem
+	Cards do nav bar
+	Criado por
+	Feito em
+
+Sobre
+	Neoplasias
+	C37: Neoplasia maligna do timo.
+	C38: Neoplasia maligna da traquéia.
+	C39: Neoplasia maligna dos órgãos respiratórios, não especificada.
+	C40: Neoplasia maligna da cavidade oral.
+	C41: Neoplasia maligna do esqueleto e cartilagens da cavidade oral.
+	C42: Neoplasia maligna do sistema nervoso central.
+	C43: Neoplasia maligna do tecido conjuntivo e de outros tecidos moles.
+	C44: Melanoma cutâneo.
+	C45: Neoplasia maligna da pleura, mediastino e pericárdio.
+	C46: Neoplasia maligna do músculo esquelético, incluindo músculos do tronco.
+	C47: Neoplasia maligna do músculo esquelético.
+	C48: Neoplasia maligna da pelve.
+	C49: Neoplasia maligna do tecido conjuntivo e de outros tecidos moles. 	
+	
+	Metodologia (Analise de sobrevivência, Kaplan meier, Base de dados, Software e pacotes)
+	Referências 
+
+Layout
+	gráficos interativos
+	cores
+	imagens
+	cards
+
+Shiny
+	inputs
+	módulos
+	gráficos
