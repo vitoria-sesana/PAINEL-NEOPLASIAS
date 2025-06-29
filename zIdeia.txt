@@ -45,3 +45,48 @@ Shiny
 	inputs
 	módulos
 	gráficos
+
+
+-------------------------------
+
+Neoplasias Torácicas Não Respiratórias, Osso e Pele e Tecidos Moles
+C37 a C49 (incluindo todas as CIDs neste intervalo)
+
+Primeira Entrega - Data: 04/07: Análise Descritiva de Sobrevivência (estimação
+não paramétrica da função de sobrevivência e da função de risco e comparação
+não paramétrica das curvas de sobrevivência)
+O painel Shiny deve apresentar as seguintes funcionalidades:
+
+1. Disponibilizar um local explicando o problema e os dados disponíveis.
+
+2. Veja o pacote ‘maxstat’ para encontrar pontos de corte para covariáveis
+quantitativas quando o intuito for categorizar essa variável.
+
+3. Curva de Sobrevivência de Kaplan-Meier:
+○ Geral: Uma curva de sobrevivência de Kaplan-Meier, com opções de incluir
+intervalos de confiança e outras funcionalidades no gráfoco
+
+○ Por Covariável Selecionável: Um input no painel que permita ao usuário
+selecionar uma covariável categórica (e.g., gênero, estágio da doença) para
+gerar curvas de Kaplan-Meier separadas para cada categoria dessa
+covariável. As curvas devem ser plotadas no mesmo gráfico paracomparação, com legenda clara.
+○ Tabela de Sobrevivência: Apresentar a tabela de sobrevivência associada à
+curva de Kaplan-Meier.
+
+
+4. Estimação não paramétrica da função de risco. Faça análogo ao feito no item 3.
+
+
+
+
+
+Ponto de corte 
+Kaplan - Meier
+Intervalos de confiança
+Tabela de sobrevivência
+Função de risco muhaz
+
+
+mostrar gráfico
+mostrar covariáveis 
+

@@ -7,20 +7,43 @@ library(data.table)
 library(shinyjs)
 library(shinydashboard)
 library(bslib)
+
+require(survival)
+require(survminer)
+require(plotly)
+
 # Módulos -----------------------------------------------------------------
-#source("", encoding = "UTF-8")
+source("scripts/panel_home.R", encoding = "UTF-8")
+source("scripts/panel_kp.R", encoding = "UTF-8")
+source("scripts/panel_grafico_kp.R", encoding = "UTF-8")
+
+
+# base --------------------------------------------------------------------
+
+base <-
+  arrow::read_parquet(
+    "bases/base_app.parquet"
+  )
 
 # UI ----------------------------------------------------------------------
 
 ui <- navbarPage(
   "Painel Neoplasias",
-  tabPanel(
-    title = "Home", 
-    "Neoplasias Torácicas Não Respiratórias, Osso e Pele e Tecidos Moles"
-    ),
-  tabPanel("Análises Exploratória", "two"),
-  tabPanel("Análises Não Paramétricas", "three"),
-  tabPanel("Análises Paramétricas e Semiparamétricas", "three"),
+
+  # análise de kaplan meier -------------------------------------------------
+
+  tabPanel(   title = "Análise Não Paramétrica",
+           sidebarLayout(
+             sidebarPanel(
+               ui_panel_kp("panel_kp")
+             ),
+             mainPanel(
+               ui_grafico_kp("panel_grafico_kp")
+             )
+           )
+  ),
+  
+  ## informações ---------------------------------------------------------
   navbarMenu("Sobre",
              tabPanel("Metodologia", "Análise de Sobrevivência"),
              tabPanel("Membros", "Leticía, Mario e Vitória")
@@ -31,7 +54,8 @@ ui <- navbarPage(
 
 # server ------------------------------------------------------------------
 server <- function(input, output, session) {
-
+  base_selecionada <- server_panel_kp("panel_kp")
+  server_grafico_kp("panel_grafico_kp", base_selecionada)
 }
 
 shinyApp(ui, server)

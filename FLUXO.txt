@@ -1,0 +1,16 @@
+1) Selecionar as variáveis
+
+- CID
+- Medida tempo (dias, meses, semanas ou anos)
+- Escolher a covariável
+
+	SE a variável for contínua: escolher ponto de corte
+
+
+
+
+RETORNAR: Base(tempo, covariável, indicadora) filtrada por CID
+
+outras opções: região 
+
+3)

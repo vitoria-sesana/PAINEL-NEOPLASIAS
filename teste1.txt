@@ -1,0 +1,111 @@
+rm(list=ls())
+# Bibliotecas -------------------------------------------------------------
+library(shiny)
+library(data.table)
+library(tidyverse)
+library(data.table)
+library(shinyjs)
+library(shinydashboard)
+library(bslib)
+
+require(survival)
+require(survminer)
+require(plotly)
+
+# Módulos -----------------------------------------------------------------
+#source("", encoding = "UTF-8")
+
+# base --------------------------------------------------------------------
+
+base <-
+  arrow::read_parquet(
+    "bases/base_app.parquet"
+  )
+
+# UI ----------------------------------------------------------------------
+
+ui <- navbarPage(
+  "Painel Neoplasias",
+  tabPanel(
+    title = "Home",
+    "Neoplasias Torácicas Não Respiratórias, Osso e Pele e Tecidos Moles"
+    ),
+  tabPanel("Análises Exploratória", "two"),
+  tabPanel("Análises Não Paramétricas", "three",
+
+           fluidRow(
+             column(2,
+                    selectInput("genre", "Genre (a movie can have multiple genres)",
+                                c("All", "Action", "Adventure", "Animation", "Biography", "Comedy",
+                                  "Crime", "Documentary", "Drama", "Family", "Fantasy", "History",
+                                  "Horror", "Music", "Musical", "Mystery", "Romance", "Sci-Fi",
+                                  "Short", "Sport", "Thriller", "War", "Western")
+                    )
+             ),
+             column(5,
+                    selectInput("sel_cid", "Selecione o Cid",
+                                unique(base$topogrup)
+                    ),
+                    plotlyOutput("grafico_km")
+                    
+             )
+           ),
+
+           ),
+  tabPanel("Análises Paramétricas e Semiparamétricas", "three"),
+  navbarMenu("Sobre",
+             tabPanel("Metodologia", "Análise de Sobrevivência"),
+             tabPanel("Membros", "Leticía, Mario e Vitória")
+  )
+)
+
+
+
+# server ------------------------------------------------------------------
+server <- function(input, output, session) {
+  
+  output$grafico_km <-
+    
+    renderPlotly({
+      ajuste_sexo <- 
+        survfit(
+          Surv(
+            time = tempo_anos, 
+            event = indicadora) ~ sexo, 
+          data = base
+          )
+      
+      gg_sexo <- 
+        ggsurvplot(
+          ajuste_sexo, 
+          data = base,
+          pval = FALSE, 
+          conf.int = TRUE,
+          conf.int.style = "ribbon",
+          ylab = "S(t) estimada", 
+          xlab = "Tempo (meses)", 
+          legend.title = "", 
+          legend.labs = c("Feminino", "Masculino")
+          )
+    
+      gg_sexo$plot <- gg_sexo$plot +
+        scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.1)) +
+        scale_x_continuous(limits = c(0, 23)) +
+        theme(legend.position = "bottom")
+    
+        # Converter para plotly
+        p <- ggplotly(gg_sexo$plot)
+    
+        # Remover hover duplicado da ribbon
+        p$x$data <- lapply(p$x$data, function(trace) {
+          if (!is.null(trace$fill) && trace$fill == "tonexty") {
+            trace$hoverinfo <- "skip"
+          }
+          trace
+          })
+    
+        p
+  })
+}
+
+shinyApp(ui, server)

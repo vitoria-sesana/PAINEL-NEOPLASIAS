@@ -1,0 +1,36 @@
+
+1) Escolher neoplastia 
+
+2) Escolher a variável tempo desejada 
+
+2) Calcular o tempo até o óbtido
+
+Em dias, meses ou anos
+
+1) Escolher variável
+
+Descrição da variável: 
+	- tipo (discreta, contínua) 
+	- descrição do que é 
+	- seus valores
+
+se for variável contínua ou discreta com lenght(unique(var)) valores acima de 6 utilizar ponto de corte
+
+
+2) ponto de corte (pop-up)
+
+3) Construir gráfico interativo
+
+Classes da covariável selecionada
+Legenda
+Intervalo de confiança
+Teste de log rank multi e 2a2
+
+4) Funcionalidade visualizar intervalo de confiança
+
+5) Visualizar tabela com valores de kaplan meier
+
+5) Baixar gráfico
+
+PNG
+SVG
