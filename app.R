@@ -12,11 +12,32 @@ require(survival)
 require(survminer)
 require(plotly)
 
-# Módulos -----------------------------------------------------------------
-source("scripts/panel_home.R", encoding = "UTF-8")
-source("scripts/panel_kp.R", encoding = "UTF-8")
-source("scripts/panel_grafico_kp.R", encoding = "UTF-8")
+# Layouts: ui e server ----------------------------------------------------
 
+## home -------------
+source("scripts/layouts/panel_home.R", encoding = "UTF-8")
+
+## seleção -----------
+source("scripts/layouts/panel_kp.R", encoding = "UTF-8")
+
+## gráficos ----------
+source("scripts/layouts/panel_grafico_kp.R", encoding = "UTF-8")
+source("scripts/layouts/panel_grafico_risco.R", encoding = "UTF-8")
+
+
+## tabelas ------- 
+source("scripts/layouts/secao_log_rank.R", encoding = "UTF-8")
+
+
+
+## informações -------
+source("scripts/layouts/funcionalidade_sobre.R", encoding = "UTF-8")
+
+# Funções auxiliares ------------------------------------------------------
+
+## gráficos -----
+source("scripts/funcoes/d-funcao-risco.R", encoding = "UTF-8")
+source("scripts/funcoes/funcao_log_rank_pares.R", encoding = "UTF-8")
 
 # base --------------------------------------------------------------------
 
@@ -25,6 +46,8 @@ base <-
     "bases/base_app.parquet"
   )
 
+
+
 # UI ----------------------------------------------------------------------
 
 ui <- navbarPage(
@@ -32,21 +55,25 @@ ui <- navbarPage(
 
   # análise de kaplan meier -------------------------------------------------
 
-  tabPanel(   title = "Análise Não Paramétrica",
-           sidebarLayout(
-             sidebarPanel(
-               ui_panel_kp("panel_kp")
-             ),
-             mainPanel(
-               ui_grafico_kp("panel_grafico_kp")
-             )
-           )
+  tabPanel(
+    title = "Análise Não Paramétrica",
+    sidebarLayout(
+      sidebarPanel(
+        ui_panel_kp("panel_kp")
+        ),
+      mainPanel(
+        ui_grafico_kp("panel_grafico_kp"),
+        ui_grafico_risco("panel_grafico_risco"),
+        ui_log_rank("secao_log_rank")
+        )
+      )
   ),
   
   ## informações ---------------------------------------------------------
-  navbarMenu("Sobre",
-             tabPanel("Metodologia", "Análise de Sobrevivência"),
-             tabPanel("Membros", "Leticía, Mario e Vitória")
+  navbarMenu(
+    "Sobre",
+    tabPanel("Metodologia", ui_sobre("funcionalidade_sobre")),
+    tabPanel("Membros", "Leticía, Mario e Vitória")
   )
 )
 
@@ -56,6 +83,9 @@ ui <- navbarPage(
 server <- function(input, output, session) {
   base_selecionada <- server_panel_kp("panel_kp")
   server_grafico_kp("panel_grafico_kp", base_selecionada)
+  server_grafico_risco("panel_grafico_risco", base_selecionada)
+  server_log_rank("secao_log_rank", base_selecionada)
+  server_sobre("funcionalidade_sobre")
 }
 
 shinyApp(ui, server)

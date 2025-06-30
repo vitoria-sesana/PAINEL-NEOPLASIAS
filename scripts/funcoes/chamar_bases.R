@@ -1,0 +1,28 @@
+
+# Função para chamar as bases necessárias pro painel ----------------------
+
+# funcao_chamar_bases <- function() {
+#   
+# }
+
+base <-
+  arrow::read_parquet(
+    "bases/base_app.parquet"
+  )
+
+dicionario_classe <- 
+  readxl::read_xlsx(
+    path = "bases/dicionario.xlsx",
+    sheet = "classe"
+  ) %>% 
+  rownames_to_column()
+
+dicionario_dominio <- 
+  readxl::read_xlsx(
+    path = "bases/dicionario.xlsx",
+    sheet = "dominio"
+  ) %>% 
+  rownames_to_column()
+
+
+

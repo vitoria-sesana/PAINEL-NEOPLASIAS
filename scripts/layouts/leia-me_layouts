@@ -1,0 +1,22 @@
+Quais layouts precisamos ter:
+
+Abas:
+Home
+Estimativas não paramétricas
+Estimativas paramétricas
+Metodologia
+Criadores
+
+
+Seções:
+
+Seção para selecionar e filtrar informações básicas da base
+Seção para selecionar e filtrar informações avançadas da base
+Seção para definir ponto de corte
+Seção para visualizar gráfico de kaplan-meier
+Seção para visualizar tabela de kaplan-meier
+Seção para visualizar gráfico de função de risco estimadas
+Seção para visualizar tabela de função de risco estimada????
+Seção para visualizar tabela de log-rank
+
+

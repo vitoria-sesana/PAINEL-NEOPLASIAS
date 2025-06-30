@@ -1,0 +1,8 @@
+Funções necessárias:
+
+Função para chamar as bases necessárias (dados de cancer e dicionarios)
+Função para calcular ponto de corte
+Plotar gráfico de kaplan meier interativo
+Plotar tabela de kaplan meier
+Plotar gráfico de função de risco estimada interativo
+Calcular tabela de log-rank simples / 2 a 2

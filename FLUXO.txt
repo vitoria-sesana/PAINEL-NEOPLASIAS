@@ -1,16 +1,34 @@
 1) Selecionar as variáveis
 
-- CID
-- Medida tempo (dias, meses, semanas ou anos)
-- Escolher a covariável
+- escolher CID
+- escolher tempo: Medida tempo (dias, meses, semanas ou anos)
+- escolher a covariável
 
 	SE a variável for contínua: escolher ponto de corte
+	mostrar valor do ponto de corte sugerido
+	retornar valores que estão no intervalo
 
-
-
+- escolher com IC ou sem IC
 
 RETORNAR: Base(tempo, covariável, indicadora) filtrada por CID
 
-outras opções: região 
+outras opções: 
+	- escolher região
+	- pacientes com recidiva
+	- tratamento recebido  
 
-3)
+3) Gráfico Kaplan Meier
+
+4) tabela de sobrevivência
+	com dowload
+
+5) Gráfico Estimação não paramétrica da função de risco
+	tem que ter com e sem ic também
+
+6) tabela de sobrevivência 
+	com dowload
+
+
+7) resetar filtros  
+
+
