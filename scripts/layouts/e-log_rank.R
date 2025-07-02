@@ -5,6 +5,7 @@ ui_log_rank <- function(id) {
   tagList(
     hr(),
     tableOutput(ns("tabela_log_rank")),
+    tableOutput(ns("tabela_base"))
   )
   
 }
@@ -37,22 +38,13 @@ server_log_rank <- function(id, base_selecionada) {
     
     output$tabela_log_rank <- renderTable(base())
     
-    
-    
-    # output$tabela_log_rank <- renderTable({
-    # 
-    #   # Pega a base de dados da reativa base()
-    #   base_grafico_kp <- base()$base_grafico_kp
-    # 
-    #   head(base_grafico_kp)
-    #   # Executa o teste log-rank par a par
-    #   teste_logrank_pares(
-    #     base = base_grafico_kp,
-    #     tempo = "tempo",
-    #     evento = "indicadora",
-    #     variavel = "covariavel"
-    #   )
-    # })
-    
+    output$tabela_base <- renderTable({
+
+      # Pega a base de dados da reativa base()
+      base_grafico_kp <- base_selecionada$data()
+
+      head(base_grafico_kp)
+    })
+
   })
 }

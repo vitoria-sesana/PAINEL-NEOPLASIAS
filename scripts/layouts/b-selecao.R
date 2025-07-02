@@ -1,4 +1,4 @@
-ui_panel_kp <- function(id) {
+ui_selecao <- function(id) {
   ns <- NS(id)
   tagList(
     br(),
@@ -45,12 +45,15 @@ ui_panel_kp <- function(id) {
       "Com ou sem intervalo?:",
       choices = c("Com IC" = TRUE,
                   "Sem IC" = FALSE))
+    
+    # checkboxInput(inputId = ns("teste_01"), "Intervalo de confiança"),
+    # verbatimTextOutput(ns("aa")),
   )
   
 }
 
 
-server_panel_kp <- function(id) {
+server_selecao <- function(id) {
   moduleServer(id, function(input, output, session) {
 
     ## Reactive: tratamento da base de dados -----------------------------------
@@ -107,12 +110,13 @@ server_panel_kp <- function(id) {
         select(input$selecionar_covariavel) %>% 
         unique() %>% 
         nrow()
-      
     })
 
-    # modal
+
+    ## Observe: Ponto de corte -------------------------------------------------
+  
     observeEvent(input$selecionar_covariavel, {
-      if (input$selecionar_covariavel %in% c("idade")) {
+      if (input$selecionar_covariavel %in% covariaveis_numericas) {
         showModal(
           modalDialog(
             title = "Alerta: Variável com múltiplas categorias!",
@@ -123,16 +127,33 @@ server_panel_kp <- function(id) {
           )
         )
       }})
+    # 
+    # observeEvent(input$selecionar_covariavel, {
+    #   if (input$selecionar_covariavel %in% covariaveis_numericas) {
+    #     return(TRUE)
+    #   } else {
+    #     returno(FALSE)
+    #   }
+    #   
+    #   })
     
     ## Intervalo de confiança --------------------------------------------------
     
     escolha_intervalo_confianca <- reactive({
-      
+
       req(input$selecionar_intervalo)
-      
+
       input$selecionar_intervalo
-      
+
     })
+    
+    # escolha_intervalo_confianca <- reactive({
+    #   req(input$teste_01)
+    #   input$teste_01
+    # })
+    # 
+    # output$aa <- renderText({input$teste_01})
+    
     
     ## saída -------------------------------------------------------------------
     

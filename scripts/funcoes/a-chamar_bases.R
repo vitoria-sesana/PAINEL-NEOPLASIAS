@@ -1,4 +1,3 @@
-
 # Função para chamar as bases necessárias pro painel ----------------------
 
 # funcao_chamar_bases <- function() {
@@ -24,5 +23,9 @@ dicionario_dominio <-
   ) %>% 
   rownames_to_column()
 
+colunas_numericas <- 
+  dicionario_classe %>% 
+  filter(ponto_corte == 1) %>% 
+  select(campo)  
 
-
+covariaveis_numericas <- colunas_numericas$campo

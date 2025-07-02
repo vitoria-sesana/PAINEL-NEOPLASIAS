@@ -11,7 +11,6 @@ ui_grafico_kp <- function(id) {
   
 }
 
-
 server_grafico_kp <- function(id, base_selecionada) {
   moduleServer(id, function(input, output, session) {
     
@@ -74,7 +73,7 @@ server_grafico_kp <- function(id, base_selecionada) {
       nome_tempo <- base_selecionada$tempo() 
       valor_IC <- base_selecionada$IC() 
       
-      if (valor_IC == FALSE) {
+      if (valor_IC != FALSE) {
         
         gg_kp <- 
           ggsurvplot(

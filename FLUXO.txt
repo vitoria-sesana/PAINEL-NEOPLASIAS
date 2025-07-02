@@ -28,7 +28,8 @@ outras opções:
 6) tabela de sobrevivência 
 	com dowload
 
+7) calcular log-rank
 
-7) resetar filtros  
+8) resetar filtros  
 
 

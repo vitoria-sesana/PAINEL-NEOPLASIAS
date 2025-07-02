@@ -14,30 +14,19 @@ require(plotly)
 
 # Layouts: ui e server ----------------------------------------------------
 
-## home -------------
-source("scripts/layouts/panel_home.R", encoding = "UTF-8")
-
-## seleção -----------
-source("scripts/layouts/panel_kp.R", encoding = "UTF-8")
-
-## gráficos ----------
-source("scripts/layouts/panel_grafico_kp.R", encoding = "UTF-8")
-source("scripts/layouts/panel_grafico_risco.R", encoding = "UTF-8")
-
-
-## tabelas ------- 
-source("scripts/layouts/secao_log_rank.R", encoding = "UTF-8")
-
-
-
-## informações -------
-source("scripts/layouts/funcionalidade_sobre.R", encoding = "UTF-8")
+source("scripts/layouts/a-homepage.R", encoding = "UTF-8")
+source("scripts/layouts/b-selecao.R", encoding = "UTF-8")
+source("scripts/layouts/c-kaplan_meier.R", encoding = "UTF-8")
+source("scripts/layouts/d-funcao_risco.R", encoding = "UTF-8")
+source("scripts/layouts/e-log_rank.R", encoding = "UTF-8")
+source("scripts/layouts/f-sobre.R", encoding = "UTF-8")
 
 # Funções auxiliares ------------------------------------------------------
 
-## gráficos -----
+source("scripts/funcoes/a-chamar_bases.R", encoding = "UTF-8")
+source("scripts/funcoes/b-ponto_de_corte.R", encoding = "UTF-8")
 source("scripts/funcoes/d-funcao-risco.R", encoding = "UTF-8")
-source("scripts/funcoes/funcao_log_rank_pares.R", encoding = "UTF-8")
+source("scripts/funcoes/e-log_rank.R", encoding = "UTF-8")
 
 # base --------------------------------------------------------------------
 
@@ -54,17 +43,33 @@ ui <- navbarPage(
   "Painel Neoplasias",
 
   # análise de kaplan meier -------------------------------------------------
-
+  # tabPanel(
+  #   title = "Home",
+  #   ui_homepage("a-homepage")
+  # ),
+  
   tabPanel(
     title = "Análise Não Paramétrica",
     sidebarLayout(
       sidebarPanel(
-        ui_panel_kp("panel_kp")
+        ui_selecao("b-selecao")
         ),
       mainPanel(
-        ui_grafico_kp("panel_grafico_kp"),
-        ui_grafico_risco("panel_grafico_risco"),
-        ui_log_rank("secao_log_rank")
+        navset_tab( 
+          nav_panel(
+            "Kaplan Meier",
+            ui_grafico_kp("c-kaplan_meier")
+            ), 
+          nav_panel(
+            "Taxa de Risco", 
+            "Page B content",
+            ui_grafico_risco("d-funcao_risco")
+            ), 
+          nav_panel(
+            "Teste de Log-Rank", 
+            ui_log_rank("e-log_rank")
+            )
+          )
         )
       )
   ),
@@ -81,11 +86,11 @@ ui <- navbarPage(
 
 # server ------------------------------------------------------------------
 server <- function(input, output, session) {
-  base_selecionada <- server_panel_kp("panel_kp")
-  server_grafico_kp("panel_grafico_kp", base_selecionada)
-  server_grafico_risco("panel_grafico_risco", base_selecionada)
-  server_log_rank("secao_log_rank", base_selecionada)
-  server_sobre("funcionalidade_sobre")
+  base_selecionada <- server_selecao("b-selecao")
+  server_grafico_kp("c-kaplan_meier", base_selecionada)
+  server_grafico_risco("d-funcao_risco", base_selecionada)
+  server_log_rank("e-log_rank", base_selecionada)
+  server_sobre("f-sobre")
 }
 
 shinyApp(ui, server)

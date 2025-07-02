@@ -1,4 +1,4 @@
-ui_panel_home <- function(id) {
+ui_homepage <- function(id) {
   ns <- NS(id)
   tabPanel(
     title = "Home",
@@ -10,7 +10,7 @@ ui_panel_home <- function(id) {
 }
 
 
-server_panel_home <- function(id) {
+server_homepage <- function(id) {
   # moduleServer(id, function(input, output, session, prefix = "") {
   #   
   # }
