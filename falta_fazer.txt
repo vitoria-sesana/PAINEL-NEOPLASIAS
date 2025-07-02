@@ -1,0 +1,18 @@
+Seção para filtro avançado
+Seção para download das saídas 
+
+Modal para carregamento dos gráficos(PC, KP e Risco) 
+
+Arrumar nome:
+	Dos eixos, títulos e legendas dos gráficos
+	Dos eixos, títulos e legendas das tabelas
+	Das caixas de seleção
+
+Arrumar os códigos
+Escrever descrição das variáveis
+Definir cores dos layout (layouts, funções, tratamento)
+Definir como chamar textos em bloco de notas para colocar no layout (home, sobre, membros)
+Centralizar tabelas e gráficos
+Definir layout da tabela
+
+https://shiny.posit.co/r/gallery/widgets/widget-gallery/

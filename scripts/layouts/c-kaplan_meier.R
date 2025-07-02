@@ -1,4 +1,4 @@
-ui_grafico_kp <- function(id) {
+ui_kaplan_meier <- function(id) {
   
   ns <- NS(id)
   
@@ -11,7 +11,7 @@ ui_grafico_kp <- function(id) {
   
 }
 
-server_grafico_kp <- function(id, base_selecionada) {
+server_kaplan_meier <- function(id, base_selecionada) {
   moduleServer(id, function(input, output, session) {
     
     ## tabela ------------------------------------------------------------------
@@ -64,6 +64,10 @@ server_grafico_kp <- function(id, base_selecionada) {
         head() 
     })
     
+    
+
+    # Gráfico: Kaplan-Meier ---------------------------------------------------
+    
     output$gráfico_kp <- renderPlotly({
       
       ### elementos
@@ -73,6 +77,7 @@ server_grafico_kp <- function(id, base_selecionada) {
       nome_tempo <- base_selecionada$tempo() 
       valor_IC <- base_selecionada$IC() 
       
+      ## Sem Intervalo de confiança -------
       if (valor_IC == FALSE) {
         
         gg_kp <- 
@@ -110,7 +115,11 @@ server_grafico_kp <- function(id, base_selecionada) {
         
         gg_kp_saida
         
-      } else {
+      }
+      
+      ## Com Intervalo de confiança -------
+      
+      else {
         
         gg_kp <-
           ggplot(

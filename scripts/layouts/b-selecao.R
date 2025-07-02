@@ -6,10 +6,17 @@ ui_selecao <- function(id) {
     hr(),
     
     ## Input: Cid ----------------------------------------
-    selectInput(
+    # selectInput(
+    #   ns("selecionar_cid"),
+    #   "Selecione o CID:",
+    #   choices = unique(base$topogrup)
+    # ),
+    
+    selectizeInput(
       ns("selecionar_cid"),
       "Selecione o CID:",
-      choices = unique(base$topogrup)
+      choices = unique(base$topogrup),
+      multiple = TRUE
     ),
     
     ## Input: Covariável ---------------------------------
@@ -170,28 +177,6 @@ server_selecao <- function(id) {
       }
       return(base)
     })
-    
-    # base_filtrada <- reactive({
-    #   var <- input$selecionar_covariavel
-    #   req(var)
-    #   req(base_selecionada_sem_corte())
-    #   
-    #   x <- base_selecionada_sem_corte()
-    #   if (var %in% covariaveis_numericas && !is.null(corte())) {
-    #     
-    #     base <- x %>%
-    #       mutate(
-    #         covariavel = case_when(
-    #           covariavel <= corte ~ paste("Menor ou igual à", corte),
-    #           covariavel > corte ~ paste("Maior que", corte)
-    #           )
-    #         )
-    #   } else if (!(var %in% covariaveis_numericas)) {
-    #     base <- base_selecionada_sem_corte()
-    #   }
-    #   
-    #   return(base)
-    # })
     
     # Reactive: informação da vaariável tempo ---------------------------------
     

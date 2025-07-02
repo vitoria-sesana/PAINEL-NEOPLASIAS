@@ -1,44 +1,4 @@
-# 
-# base <-
-#   arrow::read_parquet(
-#     "bases/base_app.parquet"
-#   )
-# 
-# library(muhaz)
-# 
-# # Vamos assumir que sua base tem as colunas:
-# # - tempo_anos: tempo até o evento ou censura
-# # - indicadora: 1 se houve o evento, 0 se censurado
-# # - sexo: variável de agrupamento
-# 
-# # Se quiser analisar por sexo, podemos dividir a base
-# base_homens <- subset(base, sexo == "1")
-# base_mulheres <- subset(base, sexo == "2")
-# 
-# base_homens
-# # Estimação da função de risco não paramétrica para homens
-# haz_homens <- muhaz::muhaz(
-#   times = base_homens$tempo_anos,
-#   delta = base_homens$indicadora
-#   )
-# 
-# # Estimação da função de risco para mulheres
-# haz_mulheres <- muhaz::muhaz(
-#   times = base_mulheres$tempo_anos,
-#   delta = base_mulheres$indicadora
-#   )
-# 
-# # Plotando os dois resultados juntos
-# plot(haz_homens, col = "blue", lwd = 2, main = "Função de risco por sexo",
-#      xlab = "Tempo (anos)", ylab = "Função de risco")
-# lines(haz_mulheres, col = "red", lwd = 2)
-# legend("topright", legend = c("Homens", "Mulheres"),
-#        col = c("blue", "red"), lwd = 2)
-
-
-
-# interativo --------------------------------------------------------------
-
+# Função para cálculo da função de risco estimada -------------------------
 
 library(muhaz)
 library(dplyr)

@@ -18,7 +18,7 @@ server_log_rank <- function(id, base_selecionada) {
       base_grafico_kp <- base_selecionada$data() 
       
       tabela_log_rank <- 
-        teste_logrank_pares(
+        funcao_logrank(
           base = base_grafico_kp,
           tempo = "tempo",
           evento = "indicadora",

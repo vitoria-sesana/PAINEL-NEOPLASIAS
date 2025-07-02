@@ -1,14 +1,14 @@
 # Função para chamar as bases necessárias pro painel ----------------------
  
-# base <-
-#   arrow::read_parquet(
-#     "bases/base_app.parquet"
-#   )
-
-base <- 
+base <-
   arrow::read_parquet(
-    "bases/base_app_completo.parquet"
+    "bases/base_app.parquet"
   )
+
+# base <- 
+#   arrow::read_parquet(
+#     "bases/base_app_completo.parquet"
+#   )
 
 dicionario_classe <- 
   readxl::read_xlsx(

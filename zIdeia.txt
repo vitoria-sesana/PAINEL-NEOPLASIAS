@@ -76,17 +76,3 @@ curva de Kaplan-Meier.
 
 4. Estimação não paramétrica da função de risco. Faça análogo ao feito no item 3.
 
-
-
-
-
-Ponto de corte 
-Kaplan - Meier
-Intervalos de confiança
-Tabela de sobrevivência
-Função de risco muhaz
-
-
-mostrar gráfico
-mostrar covariáveis 
-

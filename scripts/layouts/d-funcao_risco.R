@@ -1,4 +1,4 @@
-ui_grafico_risco <- function(id) {
+ui_risco <- function(id) {
   
   ns <- NS(id)
   
@@ -10,7 +10,7 @@ ui_grafico_risco <- function(id) {
 }
 
 
-server_grafico_risco <- function(id, base_selecionada) {
+server_risco <- function(id, base_selecionada) {
   moduleServer(id, function(input, output, session) {
     
     kaplan_meier <- reactive({
