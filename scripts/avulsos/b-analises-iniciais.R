@@ -64,8 +64,8 @@ base$dtultinfo %>% is.na() %>% table
 
 base_exemplo <- 
   base %>% 
-  filter(topogrup %in% c("C40", "C41", "C42")) %>%
-  select(topogrup, sexo,idade ,dtdiag, dttrat, dtultinfo, ultinfo) %>% 
+  # filter(topogrup %in% c("C40", "C41", "C42")) %>%
+  # select(topogrup, sexo,idade ,dtdiag, dttrat, dtultinfo, ultinfo) %>% 
   mutate(
     indicadora = 
       case_when(
@@ -82,5 +82,5 @@ base_exemplo <-
 
   # arrow::write_parquet(
   #   base_exemplo,
-  #   "bases/base_app.parquet"
+  #   "bases/base_app_completo.parquet"
   # )

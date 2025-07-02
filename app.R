@@ -28,15 +28,6 @@ source("scripts/funcoes/b-ponto_de_corte.R", encoding = "UTF-8")
 source("scripts/funcoes/d-funcao-risco.R", encoding = "UTF-8")
 source("scripts/funcoes/e-log_rank.R", encoding = "UTF-8")
 
-# base --------------------------------------------------------------------
-
-base <-
-  arrow::read_parquet(
-    "bases/base_app.parquet"
-  )
-
-
-
 # UI ----------------------------------------------------------------------
 
 ui <- navbarPage(

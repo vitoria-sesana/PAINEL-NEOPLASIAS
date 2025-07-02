@@ -12,15 +12,6 @@ ui_selecao <- function(id) {
       choices = unique(base$topogrup)
     ),
     
-    ## Input: Tipo de tempo ------------------------------
-    radioButtons(
-      ns("selecionar_tempo"), 
-      "Selecione a unidade de medida da variável tempo de interesse:",
-      choices = c("Dias" = "tempo_dias",
-                  "Semanas" = "tempo_semanas",
-                  "Meses" = "tempo_meses",
-                  "Anos" = "tempo_anos")),
-    
     ## Input: Covariável ---------------------------------
     selectInput(
       ns("selecionar_covariavel"),
@@ -39,15 +30,19 @@ ui_selecao <- function(id) {
       )
     ),
     
-    ## Input: intervalo ----------------------------------
-    radioButtons(
-      ns("selecionar_intervalo"), 
-      "Com ou sem intervalo?:",
-      choices = c("Com IC" = TRUE,
-                  "Sem IC" = FALSE))
+    textOutput(ns("texto_cov")),
     
-    # checkboxInput(inputId = ns("teste_01"), "Intervalo de confiança"),
-    # verbatimTextOutput(ns("aa")),
+    ## Input: Tipo de tempo ------------------------------
+    radioButtons(
+      ns("selecionar_tempo"), 
+      "Selecione a unidade de medida da variável tempo de interesse:",
+      choices = c("Dias" = "tempo_dias",
+                  "Semanas" = "tempo_semanas",
+                  "Meses" = "tempo_meses",
+                  "Anos" = "tempo_anos")),
+    
+    ## Input: intervalo ----------------------------------
+    checkboxInput(ns("selecionar_intervalo"), "Intervalo de confiança", FALSE)
   )
   
 }
@@ -56,9 +51,17 @@ ui_selecao <- function(id) {
 server_selecao <- function(id) {
   moduleServer(id, function(input, output, session) {
 
-    ## Reactive: tratamento da base de dados -----------------------------------
+    ns <- session$ns
+    
+    # texto ponto de corte
+    output$texto_cov <- renderText({
+      req(corte())
+      paste(corte(), is.null( corte()))
+    })
 
-    selected_data <- reactive({
+  ## Reactive: tratamento da base de dados -----------------------------------
+
+    base_selecionada_sem_corte <- reactive({
       req(input$selecionar_cid)
       req(input$selecionar_tempo)
       req(input$selecionar_covariavel)
@@ -77,6 +80,119 @@ server_selecao <- function(id) {
         mutate(tempo = round(tempo, 0))
     })
     
+# Ponto de corte ---------------------------------------------------------------
+    
+    corte <- reactiveVal(NULL)
+    dados <- reactiveVal(base)
+    
+    # SÓ APARECE O MODAL E SALVA O PONTO DE CORTE
+    observeEvent(input$selecionar_covariavel, {
+      covariavel_selecionada <- input$selecionar_covariavel
+      base_corte <- base_selecionada_sem_corte()
+      
+      if (covariavel_selecionada %in% covariaveis_numericas) {
+        # pega os valores da variável selecionada
+        valores <- dados()[[covariavel_selecionada]]
+        min_val <- min(valores, na.rm = TRUE)
+        max_val <- max(valores, na.rm = TRUE)
+        
+        ## Calcula: ponto de corte -----
+        corte_sugerido <-
+          func_ponto_corte(
+            base = base_corte,
+            tempo = "tempo",
+            evento = "indicadora",
+            variavel_continua = "covariavel"
+        )
+        
+        ## ShowModal: pontode corte ----------------
+        showModal(
+          modalDialog(
+            title = paste("Variável numérica selecionada:", covariavel_selecionada),
+            
+            plotlyOutput(ns("grafico_ponto_corte")),  
+            
+            ## Input: ponto de corte ------
+            sliderInput(
+              ns("ponto_corte"),
+              "Escolha o ponto de corte:", 
+              min = min_val,
+              max = max_val,
+              value = corte_sugerido$estimate, 
+              step = 1),
+            
+            ## botão de sair do modal
+            footer = tagList(
+              modalButton("Cancelar"),
+              actionButton(ns("confirmar_corte"), "Confirmar")
+            )
+          )
+        )
+        
+        ## gráfico ponto de corte
+        output$grafico_ponto_corte <- renderPlotly({
+          func_ponto_corte_grafico(corte_sugerido)
+        })
+      } else {
+        corte(NULL)
+      }
+    })
+    
+    
+    # ATUALIZA O PONTO DE CORTE CASO APERTE O BOTAO CONFRIMAR DO SHOW MODAL
+    observeEvent(input$confirmar_corte, {
+      corte(input$ponto_corte)
+      removeModal()
+    })
+    
+    # SELEÇÃO DA BASE DE DADOS
+    base_selecionada_com_corte <-
+      reactive({
+        req(base_selecionada_sem_corte())
+        req(corte())
+
+      base <- base_selecionada_sem_corte()
+      corte <- round(corte(),0)
+
+      if (is.null(corte())) {
+        return(base_selecionada_sem_corte())
+      } else {
+        base <-
+          base %>%
+          mutate(
+            covariavel = case_when(
+              covariavel <= corte ~ paste("Menor ou igual à", corte),
+              covariavel > corte ~ paste("Maior que", corte)
+            )
+          )
+
+        return(base)
+      }
+      return(base)
+    })
+    
+    # base_filtrada <- reactive({
+    #   var <- input$selecionar_covariavel
+    #   req(var)
+    #   req(base_selecionada_sem_corte())
+    #   
+    #   x <- base_selecionada_sem_corte()
+    #   if (var %in% covariaveis_numericas && !is.null(corte())) {
+    #     
+    #     base <- x %>%
+    #       mutate(
+    #         covariavel = case_when(
+    #           covariavel <= corte ~ paste("Menor ou igual à", corte),
+    #           covariavel > corte ~ paste("Maior que", corte)
+    #           )
+    #         )
+    #   } else if (!(var %in% covariaveis_numericas)) {
+    #     base <- base_selecionada_sem_corte()
+    #   }
+    #   
+    #   return(base)
+    # })
+    
     # Reactive: informação da vaariável tempo ---------------------------------
     
     nome_tempo <- reactive({
@@ -88,8 +204,6 @@ server_selecao <- function(id) {
         input$selecionar_tempo == "tempo_meses" ~ "Tempo (meses)",
         input$selecionar_tempo == "tempo_anos" ~ "Tempo (anos)",
       )
-      
-      
     })
 
     ## validação da covariável -------------------------------------------------
@@ -112,58 +226,30 @@ server_selecao <- function(id) {
         nrow()
     })
 
-
-    ## Observe: Ponto de corte -------------------------------------------------
-  
-    observeEvent(input$selecionar_covariavel, {
-      if (input$selecionar_covariavel %in% covariaveis_numericas) {
-        showModal(
-          modalDialog(
-            title = "Alerta: Variável com múltiplas categorias!",
-            sliderInput("oscars", "Minimum number of Oscar wins (all categories)",
-                        0, 4, 0, step = 1),
-            verbatimTextOutput("saida_modal"),
-            easyClose = TRUE
-          )
-        )
-      }})
-    # 
-    # observeEvent(input$selecionar_covariavel, {
-    #   if (input$selecionar_covariavel %in% covariaveis_numericas) {
-    #     return(TRUE)
-    #   } else {
-    #     returno(FALSE)
-    #   }
-    #   
-    #   })
-    
     ## Intervalo de confiança --------------------------------------------------
-    
+
     escolha_intervalo_confianca <- reactive({
-
-      req(input$selecionar_intervalo)
-
-      input$selecionar_intervalo
-
+      isTRUE(input$selecionar_intervalo) 
     })
     
-    # escolha_intervalo_confianca <- reactive({
-    #   req(input$teste_01)
-    #   input$teste_01
-    # })
-    # 
-    # output$aa <- renderText({input$teste_01})
-    
+    data <- reactive({
+      if (!is.null(corte())) {
+        base_selecionada_com_corte()
+      } else {
+        base_selecionada_sem_corte()
+      }
+    })
     
     ## saída -------------------------------------------------------------------
     
     return(
       list(
-        data = selected_data,
+        data = data,
         covariavel = nome_covariavel,
         classe = classe_covariavel,
         tempo = nome_tempo,
-        IC = escolha_intervalo_confianca
+        IC = escolha_intervalo_confianca,
+        corte = corte
       )
     )
     

@@ -1,12 +1,13 @@
 # Função para chamar as bases necessárias pro painel ----------------------
+ 
+# base <-
+#   arrow::read_parquet(
+#     "bases/base_app.parquet"
+#   )
 
-# funcao_chamar_bases <- function() {
-#   
-# }
-
-base <-
+base <- 
   arrow::read_parquet(
-    "bases/base_app.parquet"
+    "bases/base_app_completo.parquet"
   )
 
 dicionario_classe <- 

@@ -1,9 +1,9 @@
 ui_log_rank <- function(id) {
-  
   ns <- NS(id)
   
   tagList(
     hr(),
+    verbatimTextOutput(ns("texto_corte")),
     tableOutput(ns("tabela_log_rank")),
     tableOutput(ns("tabela_base"))
   )
@@ -46,5 +46,10 @@ server_log_rank <- function(id, base_selecionada) {
       head(base_grafico_kp)
     })
 
+    output$texto_corte <- renderText({
+      # is.null(base_selecionada$corte())
+      class(base_selecionada$data())
+    })
+    
   })
 }

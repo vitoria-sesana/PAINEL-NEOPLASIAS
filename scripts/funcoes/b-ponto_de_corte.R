@@ -4,16 +4,16 @@
 # retornará: base de dados com a covariável classificada e o valor do ponto de corte
 # e a tabela
 
-func_ponto_de_corte <- 
+# função calcular ponto de corte ------------------------------------------
+
+func_ponto_corte <- 
   function(base, tempo, evento, variavel_continua, minprop = 0.1) {
-    # Carrega pacotes necessários
+  
     require(survival)
     require(maxstat)
-  
-    # Cria a fórmula para o teste
+
     formula <- as.formula(paste0("Surv(", tempo, ", ", evento, ") ~ ", variavel_continua))
   
-    # Executa o teste MaxStat
     cut <- maxstat::maxstat.test(
       formula,
       data = base,
@@ -25,12 +25,26 @@ func_ponto_de_corte <-
     return(cut)
   }
 
-# cut <- func_ponto_de_corte(
-#   base = base,
-#   tempo = "tempo_anos",
-#   evento = "indicadora",
-#   variavel_continua = "idade"
-# )
-# 
-# cut$estimate     # ponto de corte ótimo
-# plot(cut)
+# função gráfico do ponto de corte ----------------------------------------
+
+func_ponto_corte_grafico <- 
+  function(cut) {
+    require(ggplot2)
+    require(plotly)
+    
+    dados_plot <- data.frame(
+      corte = cut$cuts,
+      estatistica = cut$stats
+    )
+    
+    gg_cut <- ggplot(dados_plot, aes(x = corte, y = estatistica)) +
+      geom_line(color = "steelblue", size = 1) +
+      geom_vline(xintercept = cut$estimate, linetype = "dashed", color = "red") +
+      labs(
+        title = "Teste MaxStat - Ponto de corte ótimo",
+        x = "Valor da variável contínua",
+        y = "Estatística Log-Rank"
+      ) +
+      theme_minimal()
+    ggplotly(gg_cut)
+    }
