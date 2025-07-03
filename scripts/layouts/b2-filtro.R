@@ -18,10 +18,9 @@ ui_filtro <- function(id) {
     "Filtro",
     br(),
     actionButton(ns("botao_filtro"),"Filtro Avançado"),
-    br(),
-    actionButton(ns("botao_reset"), "Resetar Filtro "),
+    hr(),
+    verbatimTextOutput(ns("texto_filtro"))
   )
-  
 }
 
 server_filtro <- function(id, base_selecionada) {
@@ -29,148 +28,180 @@ server_filtro <- function(id, base_selecionada) {
     
     ns <- session$ns
     
-    subsetted <- reactive({
-      req(input$species)
-      iris |> filter(Species %in% input$species)
-    })
+    ## Valores dos filtros -----------
     
-    
+    filtros <- reactiveValues(faixaetar = NULL)
 
-# Botão: filtro avançado --------------------------------------------------
+    ## Botão: filtro avançado --------------------
 
     observeEvent(input$botao_filtro,{
+      
+      df <- base_selecionada$data()
       
       showModal(
         modalDialog(
           title = "Filtro avançado",
           
-          fluidRow(
-            column(width = 3, div(style = "background-color: #f8f9fa; padding: 20px;", "Coluna 1")),
-            column(width = 3, div(style = "background-color: #dee2e6; padding: 20px;", "Coluna 2")),
-            column(width = 3, div(style = "background-color: #f8f9fa; padding: 20px;", "Coluna 3")),
-            column(width = 3, div(style = "background-color: #dee2e6; padding: 20px;", "Coluna 4"))
-          ),
           
-          fluidRow(
-            column(
-              width = 3,
-              sliderInput(
-                ns("testeteste"),
-                "Escolha o ponto de corte:", 
-                min = 0,
-                max = 10,
-                value = 5, 
-                step = 1
-              )
-              ),
-            column(
-              width = 3,
-              sliderInput(
-                ns("testeteste"),
-                "Escolha o ponto de corte:", 
-                min = 0,
-                max = 10,
-                value = 5, 
-                step = 1
-              )
-            ),
-            column(
-              width = 3,
-              sliderInput(
-                ns("testeteste"),
-                "Escolha o ponto de corte:", 
-                min = 0,
-                max = 10,
-                value = 5, 
-                step = 1
-              )
-            ),
-            column(
-              width = 3,
-              sliderInput(
-                ns("testeteste"),
-                "Escolha o ponto de corte:", 
-                min = 0,
-                max = 10,
-                value = 5, 
-                step = 1
-              )
-            ),
-            
-            ),
-          
-          
-          sliderInput(
-            ns("testeteste"),
-            "Escolha o ponto de corte:", 
-            min = 0,
-            max = 10,
-            value = 5, 
-            step = 1
-          ),
-          
-          selectizeInput(
-            'e2', '2. Multi-select', choices = colnames(mtcars), multiple = TRUE
-          ),
-          selectInput(
-            'in3', 'Options',colnames(mtcars), multiple=TRUE, selectize=FALSE),
-          
-          
-          layout_columns( 
-            card( 
-              card_header("Card 1 header"),
-              p("Card 1 body"),
-              sliderInput("slider", "Slider", 0, 10, 5),
-            ), 
-            card( 
-              card_header("Card 2 header"),
-              p("Card 2 body"),
-              textInput("text", "Add text", ""),
-            ), 
-            
             checkboxGroupInput(
-              "species", "Filter by species",
-              choices = unique(iris$Species), 
-              selected = unique(iris$Species)
+              ns("filtro_faixa_etaria"), "Filter by species",
+              choices = unique(df$faixaetar),
+              selected = unique(df$faixaetar)
             ),
-            
-            card( 
-              card_header("Card 1 header"),
-              p("Card 1 body"),
-              sliderInput("slider", "Slider", 0, 10, 5),
-            ),
-            card( 
-              card_header("Card 1 header"),
-              p("Card 1 body"),
-              sliderInput("slider", "Slider", 0, 10, 5),
-            )
-          ),
-          
+
+          # fluidRow(
+          #   column(width = 3, div(style = "background-color: #f8f9fa; padding: 20px;", "Coluna 1")),
+          #   column(width = 3, div(style = "background-color: #dee2e6; padding: 20px;", "Coluna 2")),
+          #   column(width = 3, div(style = "background-color: #f8f9fa; padding: 20px;", "Coluna 3")),
+          #   column(width = 3, div(style = "background-color: #dee2e6; padding: 20px;", "Coluna 4"))
+          # ),
+          # 
+          # fluidRow(
+          #   column(
+          #     width = 3,
+          #     sliderInput(
+          #       ns("testeteste"),
+          #       "Escolha o ponto de corte:", 
+          #       min = 0,
+          #       max = 10,
+          #       value = 5, 
+          #       step = 1
+          #     )
+          #     ),
+          #   column(
+          #     width = 3,
+          #     sliderInput(
+          #       ns("testeteste"),
+          #       "Escolha o ponto de corte:", 
+          #       min = 0,
+          #       max = 10,
+          #       value = 5, 
+          #       step = 1
+          #     )
+          #   ),
+          #   column(
+          #     width = 3,
+          #     sliderInput(
+          #       ns("testeteste"),
+          #       "Escolha o ponto de corte:", 
+          #       min = 0,
+          #       max = 10,
+          #       value = 5, 
+          #       step = 1
+          #     )
+          #   ),
+          #   column(
+          #     width = 3,
+          #     sliderInput(
+          #       ns("testeteste"),
+          #       "Escolha o ponto de corte:", 
+          #       min = 0,
+          #       max = 10,
+          #       value = 5, 
+          #       step = 1
+          #     )
+          #   ),
+          #   
+          #   ),
+          # 
+          # 
+          # sliderInput(
+          #   ns("testeteste"),
+          #   "Escolha o ponto de corte:", 
+          #   min = 0,
+          #   max = 10,
+          #   value = 5, 
+          #   step = 1
+          # ),
+          # 
+          # selectizeInput(
+          #   'e2', '2. Multi-select', choices = colnames(mtcars), multiple = TRUE
+          # ),
+          # selectInput(
+          #   'in3', 'Options',colnames(mtcars), multiple=TRUE, selectize=FALSE),
+          # 
+          # 
+          # layout_columns( 
+          #   card( 
+          #     card_header("Card 1 header"),
+          #     p("Card 1 body"),
+          #     sliderInput("slider", "Slider", 0, 10, 5),
+          #   ), 
+          #   card( 
+          #     card_header("Card 2 header"),
+          #     p("Card 2 body"),
+          #     textInput("text", "Add text", ""),
+          #   ), 
+          #   
+          #   checkboxGroupInput(
+          #     "species", "Filter by species",
+          #     choices = unique(iris$Species), 
+          #     selected = unique(iris$Species)
+          #   ),
+          #   
+          #   card( 
+          #     card_header("Card 1 header"),
+          #     p("Card 1 body"),
+          #     sliderInput("slider", "Slider", 0, 10, 5),
+          #   ),
+          #   card( 
+          #     card_header("Card 1 header"),
+          #     p("Card 1 body"),
+          #     sliderInput("slider", "Slider", 0, 10, 5),
+          #   )
+          # ),
+          # 
           footer = tagList(
             modalButton("Cancelar"),
-            actionButton(ns("confirmar_filtro"), "Confirmar")
+            actionButton(ns("resetar_filtros"), "Resetar Filtros"),
+            actionButton(ns("aplicar_filtro"), "Aplicar filtro")
           ),
-          # size = "l" 
-          class = "modal-wide"
+          size = "l"
         )
       )
       
     })
     
-    observeEvent(input$confirmar_filtro, {
+    ## salvando filtros selecionados
+    observeEvent(input$aplicar_filtro, {
+      filtros$faixaetar <- input$filtro_faixa_etaria
       removeModal()
     })
     
-
-# Botão: Resete de filtro -------------------------------------------------
-
-    # observeEvent(input$botao_filtro,{
-    #   
-    # 
-    # })
+    ## aplicando filtros
+    base_filtrada <- reactive({
+      df <- base_selecionada$data()
+      if (!is.null(filtros$faixaetar) && length(filtros$faixaetar) > 0) {
+        df <- df[df$faixaetar %in% filtros$faixaetar, ]
+      }
+      df
+    })
+    
+    ## resetando filtros ---------------
+    
+    observeEvent(input$resetar_filtros, {
+      # Resetar valores armazenados
+      filtros$faixaetar <- NULL
+      
+      # Limpar os inputs visualmente
+      updateSelectInput(session, "filtro_faixa_etaria", selected = character(0))
+    })
+    
+    output$texto_filtro <- renderText({
+      base_filtrada() %>% 
+        as.data.frame() %>% 
+        select(faixaetar) %>% 
+        unique() %>% 
+        as.character()
+    })
      
 
-    # Saída: base selecionada ------------------------------------
-    # Com filtro e sem filtro
+    # Saída: --------------------------
+    
+    return(
+      list(
+        data = base_filtrada
+      )
+    )
   })
 }

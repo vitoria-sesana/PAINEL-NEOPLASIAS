@@ -78,7 +78,8 @@ server_selecao <- function(id) {
         select(
           input$selecionar_tempo, # TEMPO
           input$selecionar_covariavel, # COVARIAVEL
-          indicadora
+          indicadora,
+          faixaetar
           ) %>% 
         rename(
           tempo = input$selecionar_tempo,

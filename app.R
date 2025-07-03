@@ -55,7 +55,6 @@ ui <- navbarPage(
             ), 
           nav_panel(
             "Taxa de Risco", 
-            "Page B content",
             ui_risco("d-funcao_risco")
             ), 
           nav_panel(
