@@ -78,9 +78,9 @@ ui <- navbarPage(
 
 # server ------------------------------------------------------------------
 server <- function(input, output, session) {
-  base_selecionada <- server_selecao("b-selecao")
-  server_filtro("b2-filtro", base_selecionada)
-  server_kaplan_meier("c-kaplan_meier", base_selecionada)
+  base_inicial <- server_selecao("b-selecao")
+  base_selecionada <- server_filtro("b2-filtro", base_inicial)
+  server_kaplan_meier("c-kaplan_meier", base_selecionada, base_inicial)
   server_risco("d-funcao_risco", base_selecionada)
   server_log_rank("e-log_rank", base_selecionada)
   server_sobre("f-sobre")

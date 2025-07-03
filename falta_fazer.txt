@@ -1,13 +1,22 @@
 Seção para filtro avançado
 Seção para download das saídas 
 
+Terminar os filtros 
+
+
+
+
+
+
 Modal para carregamento dos gráficos(PC, KP e Risco) 
+
 
 Arrumar nome:
 	Dos eixos, títulos e legendas dos gráficos
 	Dos eixos, títulos e legendas das tabelas
 	Das caixas de seleção
 
+Arrumar: quando seleciona a covariável n aparece no filtro 
 Arrumar os códigos
 Escrever descrição das variáveis
 Definir cores dos layout (layouts, funções, tratamento)

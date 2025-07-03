@@ -23,7 +23,7 @@ ui_filtro <- function(id) {
   )
 }
 
-server_filtro <- function(id, base_selecionada) {
+server_filtro <- function(id, base_inicial) {
   moduleServer(id, function(input, output, session) {
     
     ns <- session$ns
@@ -36,7 +36,7 @@ server_filtro <- function(id, base_selecionada) {
 
     observeEvent(input$botao_filtro,{
       
-      df <- base_selecionada$data()
+      df <- base_inicial$data()
       
       showModal(
         modalDialog(
@@ -170,7 +170,7 @@ server_filtro <- function(id, base_selecionada) {
     
     ## aplicando filtros
     base_filtrada <- reactive({
-      df <- base_selecionada$data()
+      df <- base_inicial$data()
       if (!is.null(filtros$faixaetar) && length(filtros$faixaetar) > 0) {
         df <- df[df$faixaetar %in% filtros$faixaetar, ]
       }

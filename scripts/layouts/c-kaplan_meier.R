@@ -3,6 +3,8 @@ ui_kaplan_meier <- function(id) {
   ns <- NS(id)
   
   tagList(
+    verbatimTextOutput(ns("texto_an")),
+    tableOutput(ns("tabela")),
     plotlyOutput(ns("gráfico_kp")),
     br(),
     tableOutput(ns("tabela_kp"))
@@ -10,14 +12,21 @@ ui_kaplan_meier <- function(id) {
   
 }
 
-server_kaplan_meier <- function(id, base_selecionada) {
+server_kaplan_meier <- function(id, base_selecionada, base_inicial) {
   moduleServer(id, function(input, output, session) {
+    
+    output$texto_an <- renderText({
+      
+      base_selecionada$data() %>% 
+        class()
+    })
     
     ## tabela ------------------------------------------------------------------
     
-    output$tabela_kp <- renderTable(
+    output$tabela <- renderTable({
       base_selecionada$data() %>% 
         head()
+    }
     )
 
     ## tabela kaplan-meier -----------------------
@@ -54,7 +63,6 @@ server_kaplan_meier <- function(id, base_selecionada) {
     
     output$tabela_kp <- renderTable({
       req(kaplan_meier()$dados_surv)
-      
       kaplan_meier()$dados_surv %>% 
         head() 
     })
@@ -69,8 +77,8 @@ server_kaplan_meier <- function(id, base_selecionada) {
       base_grafico_kp <- kaplan_meier()$base_grafico_kp
       ajuste_kp <- kaplan_meier()$ajuste_kp
       dados_surv <-  kaplan_meier()$dados_surv
-      nome_tempo <- base_selecionada$tempo() 
-      valor_IC <- base_selecionada$IC() 
+      nome_tempo <- base_inicial$tempo() 
+      valor_IC <- base_inicial$IC() 
       
       ## Sem Intervalo de confiança -------
       if (valor_IC == FALSE) {
