@@ -28,10 +28,11 @@ ui_selecao <- function(id) {
           base %>% 
             select(
               -topogrup,
-              -dtdiag, 
-              -dttrat,
-              -dtultinfo,
-              -ultinfo,
+              -filtro_subtopo,
+              # -dtdiag, 
+              # -dttrat,
+              # -dtultinfo,
+              # -ultinfo,
               -indicadora,
               -tempo_dias, -tempo_anos, -tempo_semanas, -tempo_meses))
       )
@@ -81,7 +82,10 @@ server_selecao <- function(id) {
             input$selecionar_covariavel,
             "indicadora",
             "faixaetar",
-            "sexo"
+            "sexo",
+            "escolari",
+            "ufnasc",
+            "ufresid"
           ))
         ) %>%
         mutate(

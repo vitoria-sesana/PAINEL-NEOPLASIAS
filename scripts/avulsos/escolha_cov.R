@@ -10,13 +10,13 @@ base <-
 # social ------------------------------------------------------------------
 
 base$escolari %>% table
-base$idade %>% table
+base$idade %>% table # nao aparece no filtro 
 base$sexo %>% table
 base$faixaetar %>% table
 base$ufnasc %>% table
 base$ufresid %>% table
-base$ibge %>% table
-base$cidade %>% table
+base$ibge %>% table # não usar
+base$cidade %>% table # usar
 
 
 # diagnostico -------------------------------------------------------------
@@ -31,9 +31,9 @@ base$anodiag %>% table
 
 # localização do tumor/topografia -----------------------------------------
 
-base$topo %>% unique()
-base$topogrup %>% unique()
-base$desctopo %>% unique() # tratar e utilizar no painel
+base$topo %>% unique() %>% length()
+base$topogrup %>% unique() %>% length()
+base$desctopo %>% unique() %>% length() # tratar e utilizar no painel
 
 ## morfologia ---
 base$morfo %>% table # morfologia

@@ -5,9 +5,14 @@
 #     "bases/base_app.parquet"
 #   )
 
-base <-
+# base <-
+#   arrow::read_parquet(
+#     "bases/base_app_completo.parquet"
+#   )
+
+base <- 
   arrow::read_parquet(
-    "bases/base_app_completo.parquet"
+    "bases/base_final.parquet"
   )
 
 dicionario_classe <- 
