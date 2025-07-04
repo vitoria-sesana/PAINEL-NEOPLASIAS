@@ -1,5 +1,3 @@
-Seção para filtro avançado
-Seção para download das saídas 
 
 Terminar os filtros 
 
@@ -23,5 +21,12 @@ Definir cores dos layout (layouts, funções, tratamento)
 Definir como chamar textos em bloco de notas para colocar no layout (home, sobre, membros)
 Centralizar tabelas e gráficos
 Definir layout da tabela
+
+
+
+# FRESCURAS:
+	- Seção para download das saídas 
+	- Falar como foi feito o cálculo da variável tempo e indicadora
+
 
 https://shiny.posit.co/r/gallery/widgets/widget-gallery/
