@@ -34,7 +34,25 @@ base_principal <-
     # tratamento 
     naotrat,
     tratamento,
-    trathosp
+    trathosp,
+    
+    # diagnostico
+    clinica,
+    diagprev,
+    basediag,
+    anodiag,  
+    cateatend, 
+    
+    # habilitação
+    habilit,
+    habilit1,
+    
+    # Recidiva
+    recnenhum,
+    reclocal,
+    recregio,
+    recdist
+    
     
   ) 
 

@@ -93,13 +93,33 @@ server_selecao <- function(id) {
             "ec",
             "ecgrup",
             "dsccido",
+            
+            # tumor infantil
             "cici",
             "cicigrup",
             "cicisubgru",
+            
+            # tratamento
             "naotrat",
             "tratamento",
             "trathosp",
-            "tratfapos"
+            
+            # diagnostico
+            "clinica",
+            "diagprev",
+            "basediag",
+            "anodiag",  
+            "cateatend", 
+            
+            # habilitação,
+            "habilit",
+            "habilit1",
+            
+            # recidiva
+            "recnenhum",
+            "reclocal",
+            "recregio",
+            "recdist"
           ))
         ) %>%
         mutate(

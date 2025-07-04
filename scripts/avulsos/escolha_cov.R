@@ -20,13 +20,14 @@ base$ufresid %>% table
 
 # diagnostico -------------------------------------------------------------
 
-base$cateatend %>% table
-base$dtconsult %>% table # n
 base$clinica %>% table
 base$diagprev %>% table 
-base$dtdiag %>% table # n
 base$basediag %>% table
 base$anodiag %>% table 
+base$cateatend %>% table
+base$dtconsult %>% table # n
+base$dtdiag %>% table # n
+
 
 # localização do tumor/topografia -----------------------------------------
 

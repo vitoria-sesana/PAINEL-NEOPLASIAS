@@ -13,12 +13,11 @@ ui_filtro <- function(id) {
   tagList(
     hr(),
     br(),
-    # Input: botão filtro avançado
+    # Input: botão filtro avançado ------------------
     actionButton(ns("botao_filtro"),"Filtro Avançado"),
     br(),
-    hr(),
-    verbatimTextOutput(ns("texto_filtro"))
-  )
+    hr()
+    )
 }
 
 server_filtro <- function(id, base_inicial) {
@@ -49,8 +48,25 @@ server_filtro <- function(id, base_inicial) {
       # tratamento
       naotrat = NULL,
       tratamento = NULL,
-      trathosp = NULL
+      trathosp = NULL,
       
+      # diagnostico
+      clinica = NULL,
+      diagprev = NULL,
+      basediag = NULL,
+      anodiag = NULL,  
+      cateatend = NULL,
+      
+      # habilitação
+      habilit = NULL,
+      habilit1 = NULL,
+      habilit2= NULL,
+      
+      # recidiva
+      recnenhum = NULL,
+      reclocal = NULL,
+      recregio = NULL,
+      recdist = NULL
       )
 
     # ObserveEvent: botão filtro  --------------------
@@ -185,12 +201,55 @@ server_filtro <- function(id, base_inicial) {
           ),
           br(),
           hr(),
+          
+          
           fluidRow(
             
             ## Diagnostico -------------------
             column(
               3,
               h4("Diagnóstico"),
+              
+              ####  Clinica -------
+              selectInput(
+                ns("filtro_clinica"),
+                'Tipo de clínica :',
+                sort(unique(df$clinica)),
+                multiple=TRUE, 
+                selectize=FALSE),
+              
+              #### Atendimento -------
+              selectInput(
+                ns("filtro_cateatend"),
+                'Tipo de atendimento:',
+                sort(unique(df$cateatend)),
+                multiple=TRUE, 
+                selectize=FALSE),
+              
+              ####  Diag e trat anterior-------
+              selectInput(
+                ns("filtro_diagprev"),
+                'Diagnóstico e tratamento anterior:',
+                sort(unique(df$diagprev)),
+                multiple=TRUE, 
+                selectize=FALSE),
+              
+              ####  Ano diag-------
+              selectInput(
+                ns("filtro_anodiag"),
+                'Ano do diagnóstico:',
+                sort(unique(df$anodiag)),
+                multiple=TRUE, 
+                selectize=FALSE),
+              
+              ####  Tipo diag-------
+              selectInput(
+                ns("filtro_basediag"),
+                'Tipo de diagnóstico:',
+                sort(unique(df$basediag)),
+                multiple=TRUE, 
+                selectize=FALSE),
+              
             ),
             
             ## Tratamento -------------------
@@ -229,21 +288,60 @@ server_filtro <- function(id, base_inicial) {
             column(
               3,
               h4("Reciditva"),
+              
+              checkboxGroupInput(
+                ns("filtro_recnenhum"), 
+                'Sem recidiva:',
+                choices = unique(df$recnenhum),
+                selected = unique(df$recnenhum)
               ),
-            
+              
+              checkboxGroupInput(
+                ns("filtro_reclocal"), 
+                'Recidiva local:',
+                choices = unique(df$reclocal),
+                selected = unique(df$reclocal)
+              ),
+              
+              
+              checkboxGroupInput(
+                ns("filtro_recregio"), 
+                'Recidiva regional:',
+                choices = unique(df$recregio),
+                selected = unique(df$recregio)
+              ),
+              
+              checkboxGroupInput(
+                ns("filtro_recdist"), 
+                'Recidiva a distância/metástase:',
+                choices = unique(df$recdist),
+                selected = unique(df$recdist)
+                ),
+            ),
             ## Habilitação -------------------
             column(
               3,
               h4("Habilitação"),
+              
+              #### Habilitações -------
+              selectInput(
+                ns("filtro_habilit"),
+                'Habilitações:',
+                sort(unique(df$habilit)),
+                multiple=TRUE, 
+                selectize=FALSE),
+              
+              #### Habilitações1 -------
+              selectInput(
+                ns("filtro_habilit1"),
+                'Categorias de habilitações:',
+                sort(unique(df$habilit1)),
+                multiple=TRUE, 
+                selectize=FALSE),
             ),
             
           
           ),
-          
-          
-          
-          
-          
 
           footer = tagList(
             modalButton("Cancelar"),
@@ -277,12 +375,29 @@ server_filtro <- function(id, base_inicial) {
       filtros$cicigrup  <- input$filtro_cicigrup
       filtros$cicisubgru <- input$filtro_cicisubgru
       
-      
-      
       ## Trtatamento ----------------
       filtros$tratamento <- input$filtro_tratamento
       filtros$trathosp  <- input$filtro_trathosp
       filtros$naotrat <- input$filtro_naotrat
+      
+      
+      ## Clínica -------------------
+      filtros$clinica <- input$filtro_clinica
+      filtros$diagprev  <- input$filtro_diagprev
+      filtros$basediag <- input$filtro_basediag
+      filtros$anodiag  <- input$filtro_anodiag
+      filtros$cateatend <- input$filtro_cateatend
+      
+      ## Habilitação ---------------
+      filtros$habilit <- input$filtro_habilit
+      filtros$habilit1 <- input$filtro_habilit1
+      
+      ## Recidiva  ---------------
+      filtros$recnenhum <- input$filtro_recnenhum
+      filtros$reclocal<- input$filtro_reclocal
+      filtros$recregio <- input$filtro_recregio
+      filtros$recdist <- input$filtro_recdist
+      
       removeModal()
     })
     
@@ -333,19 +448,43 @@ server_filtro <- function(id, base_inicial) {
       }
       if (!is.null(filtros$naotrat) && length(filtros$naotrat) > 0) {
         df <- df[df$naotrat %in% filtros$naotrat, ]
+      } #tratamento
+      if (!is.null(filtros$clinica) && length(filtros$clinica) > 0) {
+        df <- df[df$clinica %in% filtros$clinica, ]
       }
+      if (!is.null(filtros$diagprev) && length(filtros$diagprev) > 0) {
+        df <- df[df$diagprev %in% filtros$diagprev, ]
+      }
+      if (!is.null(filtros$basediag ) && length(filtros$basediag ) > 0) {
+        df <- df[df$basediag  %in% filtros$basediag , ]
+      }
+      if (!is.null(filtros$anodiag) && length(filtros$anodiag) > 0) {
+        df <- df[df$anodiag %in% filtros$anodiag, ]
+      }
+      if (!is.null(filtros$cateatend) && length(filtros$cateatend) > 0) {
+        df <- df[df$cateatend %in% filtros$cateatend, ]
+      } # habilitação
+      if (!is.null(filtros$habilit) && length(filtros$habilit) > 0) {
+        df <- df[df$habilit %in% filtros$habilit, ]
+      }
+      if (!is.null(filtros$habilit1) && length(filtros$habilit1) > 0) {
+        df <- df[df$habilit1 %in% filtros$habilit1, ]
+      } # recidiva
+      if (!is.null(filtros$recnenhum) && length(filtros$recnenhum) > 0) {
+        df <- df[df$recnenhum %in% filtros$recnenhum, ]
+      }
+      if (!is.null(filtros$reclocal) && length(filtros$reclocal) > 0) {
+        df <- df[df$reclocal %in% filtros$reclocal, ]
+      } 
+      if (!is.null(filtros$recregio) && length(filtros$recregio) > 0) {
+        df <- df[df$recregio %in% filtros$recregio, ]
+      }
+      if (!is.null(filtros$recdist) && length(filtros$recdist) > 0) {
+        df <- df[df$recdist %in% filtros$recdist, ]
+      } 
       
       df
     })
-    
-    output$texto_filtro <- renderText({
-      react_base_filtrada() %>% 
-        as.data.frame() %>% 
-        select(trathosp) %>% 
-        unique() %>% 
-        as.character()
-    })
-     
 
     # Saída: -------------------------------------------------------------------
     
