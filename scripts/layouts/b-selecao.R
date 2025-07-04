@@ -73,19 +73,21 @@ server_selecao <- function(id) {
       req(input$selecionar_tempo)
       req(input$selecionar_covariavel)
       
-      base %>% 
-        filter(topogrup == as.character(input$selecionar_cid)) %>% # CID
+      base %>%
+        filter(topogrup == as.character(input$selecionar_cid)) %>%
         select(
-          input$selecionar_tempo, # TEMPO
-          input$selecionar_covariavel, # COVARIAVEL
-          indicadora,
-          faixaetar
-          ) %>% 
-        rename(
-          tempo = input$selecionar_tempo,
-          covariavel = input$selecionar_covariavel
-          ) %>% 
-        mutate(tempo = round(tempo, 0))
+          all_of(c(
+            input$selecionar_tempo,
+            input$selecionar_covariavel,
+            "indicadora",
+            "faixaetar",
+            "sexo"
+          ))
+        ) %>%
+        mutate(
+          tempo = round(.data[[input$selecionar_tempo]], 0),
+          covariavel = .data[[input$selecionar_covariavel]]
+        )
     })
     
 # Ponto de corte ---------------------------------------------------------------

@@ -1,8 +1,5 @@
-# Layout de filtro avançado -----------------------------------------------
-
-
+# Layout: filtragem avançada -----------------------------------------------
 # recebe a base de dados com todas as colunas
-
 # base de dados completa
 # ponto de corte
 # covariavel
@@ -15,9 +12,10 @@ ui_filtro <- function(id) {
   ns <- NS(id)
   tagList(
     hr(),
-    "Filtro",
     br(),
+    # Input: botão filtro avançado
     actionButton(ns("botao_filtro"),"Filtro Avançado"),
+    br(),
     hr(),
     verbatimTextOutput(ns("texto_filtro"))
   )
@@ -28,12 +26,14 @@ server_filtro <- function(id, base_inicial) {
     
     ns <- session$ns
     
-    ## Valores dos filtros -----------
+    # Reactive: valores filtros -----------
     
-    filtros <- reactiveValues(faixaetar = NULL)
+    filtros <- reactiveValues(
+      faixaetar = NULL,
+      sexo = NULL
+      )
 
-    ## Botão: filtro avançado --------------------
-
+    # ObserveEvent: botão filtro  --------------------
     observeEvent(input$botao_filtro,{
       
       df <- base_inicial$data()
@@ -42,12 +42,48 @@ server_filtro <- function(id, base_inicial) {
         modalDialog(
           title = "Filtro avançado",
           
-          
-            checkboxGroupInput(
-              ns("filtro_faixa_etaria"), "Filter by species",
-              choices = unique(df$faixaetar),
-              selected = unique(df$faixaetar)
+          fluidRow(
+            
+            ## Social --------------
+            column(4,
+                   h4("Características Sociais"),
+                   
+                   #### faixa etária ------------
+                   selectizeInput(
+                     ns("filtro_faixa_etaria"),
+                     "Selecione a faixa etária:",
+                     choices = unique(df$faixaetar),
+                     multiple = TRUE,
+                     selected = unique(df$faixaetar),
+                   ),
+                   
+                   #### sexo ---------------------
+                   checkboxGroupInput(
+                     ns("filtro_sexo"), 
+                     "Selecione os genêros:",
+                     choices = unique(df$sexo),
+                     selected = unique(df$sexo)
+                   ),
+                   
+                   textInput("filtro1_3", "Filtro 3:")
             ),
+            
+            # Tumores -------------------
+            column(4,
+                   h4("Filtros - Coluna 2"),
+                   selectInput("filtro2_1", "Filtro 1:", choices = c("X", "Y", "Z")),
+                   sliderInput("filtro2_2", "Filtro 2:", min = 10, max = 500, value = 100),
+                   textInput("filtro2_3", "Filtro 3:")
+            ),
+            
+            # Coluna 3
+            column(4,
+                   h4("Filtros - Coluna 3"),
+                   selectInput("filtro3_1", "Filtro 1:", choices = c("Red", "Green", "Blue")),
+                   sliderInput("filtro3_2", "Filtro 2:", min = 1, max = 10, value = 5),
+                   textInput("filtro3_3", "Filtro 3:")
+            )
+          ),
 
           # fluidRow(
           #   column(width = 3, div(style = "background-color: #f8f9fa; padding: 20px;", "Coluna 1")),
@@ -153,7 +189,7 @@ server_filtro <- function(id, base_inicial) {
           # 
           footer = tagList(
             modalButton("Cancelar"),
-            actionButton(ns("resetar_filtros"), "Resetar Filtros"),
+            # actionButton(ns("resetar_filtros"), "Resetar Filtros"),
             actionButton(ns("aplicar_filtro"), "Aplicar filtro")
           ),
           size = "l"
@@ -162,33 +198,29 @@ server_filtro <- function(id, base_inicial) {
       
     })
     
-    ## salvando filtros selecionados
+    # ObserveEvent: filtros ---------------------------------------------------
     observeEvent(input$aplicar_filtro, {
+      
+      ## Social ---------
       filtros$faixaetar <- input$filtro_faixa_etaria
+      filtros$sexo <- input$filtro_sexo
       removeModal()
     })
     
-    ## aplicando filtros
-    base_filtrada <- reactive({
+    # Reactive: filtros --------------------------------------------------------
+    react_base_filtrada <- reactive({
       df <- base_inicial$data()
       if (!is.null(filtros$faixaetar) && length(filtros$faixaetar) > 0) {
         df <- df[df$faixaetar %in% filtros$faixaetar, ]
       }
+      if (!is.null(filtros$sexo) && length(filtros$sexo) > 0) {
+        df <- df[df$sexo %in% filtros$sexo, ]
+      }
       df
     })
     
-    ## resetando filtros ---------------
-    
-    observeEvent(input$resetar_filtros, {
-      # Resetar valores armazenados
-      filtros$faixaetar <- NULL
-      
-      # Limpar os inputs visualmente
-      updateSelectInput(session, "filtro_faixa_etaria", selected = character(0))
-    })
-    
     output$texto_filtro <- renderText({
-      base_filtrada() %>% 
+      react_base_filtrada() %>% 
         as.data.frame() %>% 
         select(faixaetar) %>% 
         unique() %>% 
@@ -196,11 +228,11 @@ server_filtro <- function(id, base_inicial) {
     })
      
 
-    # Saída: --------------------------
+    # Saída: -------------------------------------------------------------------
     
     return(
       list(
-        data = base_filtrada
+        data = react_base_filtrada
       )
     )
   })

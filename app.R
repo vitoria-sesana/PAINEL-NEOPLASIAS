@@ -16,11 +16,11 @@ require(plotly)
 
 source("scripts/layouts/a-homepage.R", encoding = "UTF-8")
 source("scripts/layouts/b-selecao.R", encoding = "UTF-8")
-source("scripts/layouts/b2-filtro.R", encoding = "UTF-8")
-source("scripts/layouts/c-kaplan_meier.R", encoding = "UTF-8")
-source("scripts/layouts/d-funcao_risco.R", encoding = "UTF-8")
-source("scripts/layouts/e-log_rank.R", encoding = "UTF-8")
-source("scripts/layouts/f-sobre.R", encoding = "UTF-8")
+source("scripts/layouts/c-filtro.R", encoding = "UTF-8")
+source("scripts/layouts/d-kaplan_meier.R", encoding = "UTF-8")
+source("scripts/layouts/e-funcao_risco.R", encoding = "UTF-8")
+source("scripts/layouts/f-log_rank.R", encoding = "UTF-8")
+source("scripts/layouts/g-sobre.R", encoding = "UTF-8")
 
 # Funções auxiliares ------------------------------------------------------
 
@@ -45,21 +45,21 @@ ui <- navbarPage(
     sidebarLayout(
       sidebarPanel(
         ui_selecao("b-selecao"),
-        ui_filtro("b2-filtro")
+        ui_filtro("c-filtro")
         ),
       mainPanel(
         navset_tab( 
           nav_panel(
             "Kaplan Meier",
-            ui_kaplan_meier("c-kaplan_meier")
+            ui_kaplan_meier("d-kaplan_meier")
             ), 
           nav_panel(
             "Taxa de Risco", 
-            ui_risco("d-funcao_risco")
+            ui_risco("e-funcao_risco")
             ), 
           nav_panel(
             "Teste de Log-Rank", 
-            ui_log_rank("e-log_rank")
+            ui_log_rank("f-log_rank")
             )
           )
         )
@@ -69,7 +69,7 @@ ui <- navbarPage(
   ## informações ---------------------------------------------------------
   navbarMenu(
     "Sobre",
-    tabPanel("Metodologia", ui_sobre("funcionalidade_sobre")),
+    tabPanel("Metodologia", ui_sobre("g_sobre")),
     tabPanel("Membros", "Leticía, Mario e Vitória")
   )
 )
@@ -79,11 +79,11 @@ ui <- navbarPage(
 # server ------------------------------------------------------------------
 server <- function(input, output, session) {
   base_inicial <- server_selecao("b-selecao")
-  base_selecionada <- server_filtro("b2-filtro", base_inicial)
-  server_kaplan_meier("c-kaplan_meier", base_selecionada, base_inicial)
-  server_risco("d-funcao_risco", base_selecionada)
-  server_log_rank("e-log_rank", base_selecionada)
-  server_sobre("f-sobre")
+  base_selecionada <- server_filtro("c-filtro", base_inicial)
+  server_kaplan_meier("d-kaplan_meier", base_selecionada, base_inicial)
+  server_risco("e-funcao_risco", base_selecionada)
+  server_log_rank("f-log_rank", base_selecionada)
+  server_sobre("g-sobre")
 }
 
 shinyApp(ui, server)

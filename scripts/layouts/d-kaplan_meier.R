@@ -123,41 +123,78 @@ server_kaplan_meier <- function(id, base_selecionada, base_inicial) {
       ## Com Intervalo de confiança -------
       
       else {
-        
-        gg_kp <-
-          ggplot(
-            dados_surv,
-            aes(x = time, y = surv, color = covariavel, fill = covariavel)
+        if ("covariavel" %in% colnames(dados_surv)) {
+          gg_kp <-
+            ggplot(
+              dados_surv,
+              aes(x = time, y = surv, color = covariavel, fill = covariavel)
             ) +
-          geom_step(
-            size = 1
+            geom_step(
+              size = 1
             ) +
-          geom_ribbon(
-            aes(
-              ymin = lower,
-              ymax = upper
+            geom_ribbon(
+              aes(
+                ymin = lower,
+                ymax = upper
               ),
-            alpha = 0.2,
-            color = NA
+              alpha = 0.2,
+              color = NA
             ) +
-          labs(
-            x = nome_tempo,
-            y = "S(t) estimada",
-            color = "", fill = ""
-          ) +
-          scale_y_continuous(
-            limits = c(0, 1), 
-            breaks = seq(from = min(base_grafico_kp$tempo, na.rm = TRUE),
-                         to = max(base_grafico_kp$tempo, na.rm = TRUE),
-                         length.out = 7)
-            
-          ) +
-          scale_x_continuous(limits = c(0, max(base_grafico_kp$tempo))) +
-          theme_bw() +
-          theme(legend.position = "bottom")
-        
-        # Converte para plotly com ICs visíveis
-        ggplotly(gg_kp, tooltip = c("x", "y", "sexo"))
+            labs(
+              x = nome_tempo,
+              y = "S(t) estimada",
+              color = "", fill = ""
+            ) +
+            scale_y_continuous(
+              limits = c(0, 1), 
+              breaks = seq(from = min(base_grafico_kp$tempo, na.rm = TRUE),
+                           to = max(base_grafico_kp$tempo, na.rm = TRUE),
+                           length.out = 7)
+              
+            ) +
+            scale_x_continuous(limits = c(0, max(base_grafico_kp$tempo))) +
+            theme_bw() +
+            theme(legend.position = "bottom")
+          
+          # Converte para plotly com ICs visíveis
+          ggplotly(gg_kp, tooltip = c("x", "y", "sexo"))
+        }
+        else{
+          gg_kp <-
+            ggplot(
+              dados_surv,
+              aes(x = time, y = surv)
+            ) +
+            geom_step(
+              size = 1
+            ) +
+            geom_ribbon(
+              aes(
+                ymin = lower,
+                ymax = upper
+              ),
+              alpha = 0.2,
+              color = NA
+            ) +
+            labs(
+              x = nome_tempo,
+              y = "S(t) estimada",
+              color = "", fill = ""
+            ) +
+            scale_y_continuous(
+              limits = c(0, 1), 
+              breaks = seq(from = min(base_grafico_kp$tempo, na.rm = TRUE),
+                           to = max(base_grafico_kp$tempo, na.rm = TRUE),
+                           length.out = 7)
+              
+            ) +
+            scale_x_continuous(limits = c(0, max(base_grafico_kp$tempo))) +
+            theme_bw() +
+            theme(legend.position = "bottom")
+          
+          # Converte para plotly com ICs visíveis
+          ggplotly(gg_kp, tooltip = c("x", "y"))
+        }
       }
       
     })
