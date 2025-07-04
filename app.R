@@ -74,8 +74,6 @@ ui <- navbarPage(
   )
 )
 
-
-
 # server ------------------------------------------------------------------
 server <- function(input, output, session) {
   base_inicial <- server_selecao("b-selecao")

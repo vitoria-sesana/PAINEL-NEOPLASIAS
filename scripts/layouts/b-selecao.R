@@ -15,7 +15,8 @@ ui_selecao <- function(id) {
     selectizeInput(
       ns("selecionar_cid"),
       "Selecione o CID:",
-      choices = unique(base$topogrup),
+      choices = sort(unique(base$topogrup)),
+      selected = sort(unique(base$topogrup))[1],
       multiple = TRUE
     ),
     
@@ -35,7 +36,8 @@ ui_selecao <- function(id) {
               # -ultinfo,
               -indicadora,
               -tempo_dias, -tempo_anos, -tempo_semanas, -tempo_meses))
-      )
+      ),
+      selected = "sexo"
     ),
     
     textOutput(ns("texto_cov")),

@@ -30,7 +30,9 @@ server_filtro <- function(id, base_inicial) {
     
     filtros <- reactiveValues(
       faixaetar = NULL,
-      sexo = NULL
+      sexo = NULL,
+      ufnasc = NULL,
+      ufresid = NULL
       )
 
     # ObserveEvent: botão filtro  --------------------
@@ -45,14 +47,14 @@ server_filtro <- function(id, base_inicial) {
           fluidRow(
             
             ## Social --------------
-            column(4,
+            column(3,
                    h4("Características Sociais"),
                    
                    #### faixa etária ------------
                    selectizeInput(
                      ns("filtro_faixa_etaria"),
-                     "Selecione a faixa etária:",
-                     choices = unique(df$faixaetar),
+                     "Faixa etária:",
+                     choices = sort(unique(df$faixaetar)),
                      multiple = TRUE,
                      selected = unique(df$faixaetar),
                    ),
@@ -60,16 +62,31 @@ server_filtro <- function(id, base_inicial) {
                    #### sexo ---------------------
                    checkboxGroupInput(
                      ns("filtro_sexo"), 
-                     "Selecione os genêros:",
+                     "Gênero:",
                      choices = unique(df$sexo),
                      selected = unique(df$sexo)
                    ),
                    
-                   textInput("filtro1_3", "Filtro 3:")
+                   #### ufnasc -----------------
+                   selectInput(
+                     ns("filtro_ufnasc"),
+                     'UF de nascimento:',
+                     sort(unique(df$ufnasc)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+                   
+                   #### ufresid -----------------
+                   selectInput(
+                     ns("filtro_ufresid"),
+                     'UF de residência:',
+                     sort(unique(df$ufresid)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+
             ),
             
             # Tumores -------------------
-            column(4,
+            column(3,
                    h4("Filtros - Coluna 2"),
                    selectInput("filtro2_1", "Filtro 1:", choices = c("X", "Y", "Z")),
                    sliderInput("filtro2_2", "Filtro 2:", min = 10, max = 500, value = 100),
@@ -77,116 +94,32 @@ server_filtro <- function(id, base_inicial) {
             ),
             
             # Coluna 3
-            column(4,
+            column(3,
                    h4("Filtros - Coluna 3"),
                    selectInput("filtro3_1", "Filtro 1:", choices = c("Red", "Green", "Blue")),
                    sliderInput("filtro3_2", "Filtro 2:", min = 1, max = 10, value = 5),
                    textInput("filtro3_3", "Filtro 3:")
+            ),
+            # Coluna 4
+            column(3,
+                   h4("Filtros - Coluna 4"),
+                   selectInput("filtro3_1", "Filtro 1:", choices = c("Red", "Green", "Blue")),
+                   sliderInput("filtro3_2", "Filtro 2:", min = 1, max = 10, value = 5),
+                   textInput("filtro3_3", "Filtro 3:")
             )
+            
           ),
 
-          # fluidRow(
-          #   column(width = 3, div(style = "background-color: #f8f9fa; padding: 20px;", "Coluna 1")),
-          #   column(width = 3, div(style = "background-color: #dee2e6; padding: 20px;", "Coluna 2")),
-          #   column(width = 3, div(style = "background-color: #f8f9fa; padding: 20px;", "Coluna 3")),
-          #   column(width = 3, div(style = "background-color: #dee2e6; padding: 20px;", "Coluna 4"))
-          # ),
-          # 
-          # fluidRow(
-          #   column(
-          #     width = 3,
-          #     sliderInput(
-          #       ns("testeteste"),
-          #       "Escolha o ponto de corte:", 
-          #       min = 0,
-          #       max = 10,
-          #       value = 5, 
-          #       step = 1
-          #     )
-          #     ),
-          #   column(
-          #     width = 3,
-          #     sliderInput(
-          #       ns("testeteste"),
-          #       "Escolha o ponto de corte:", 
-          #       min = 0,
-          #       max = 10,
-          #       value = 5, 
-          #       step = 1
-          #     )
-          #   ),
-          #   column(
-          #     width = 3,
-          #     sliderInput(
-          #       ns("testeteste"),
-          #       "Escolha o ponto de corte:", 
-          #       min = 0,
-          #       max = 10,
-          #       value = 5, 
-          #       step = 1
-          #     )
-          #   ),
-          #   column(
-          #     width = 3,
-          #     sliderInput(
-          #       ns("testeteste"),
-          #       "Escolha o ponto de corte:", 
-          #       min = 0,
-          #       max = 10,
-          #       value = 5, 
-          #       step = 1
-          #     )
-          #   ),
-          #   
-          #   ),
-          # 
-          # 
-          # sliderInput(
-          #   ns("testeteste"),
-          #   "Escolha o ponto de corte:", 
-          #   min = 0,
-          #   max = 10,
-          #   value = 5, 
-          #   step = 1
-          # ),
-          # 
-          # selectizeInput(
-          #   'e2', '2. Multi-select', choices = colnames(mtcars), multiple = TRUE
-          # ),
-          # selectInput(
-          #   'in3', 'Options',colnames(mtcars), multiple=TRUE, selectize=FALSE),
-          # 
-          # 
-          # layout_columns( 
-          #   card( 
-          #     card_header("Card 1 header"),
-          #     p("Card 1 body"),
-          #     sliderInput("slider", "Slider", 0, 10, 5),
-          #   ), 
-          #   card( 
-          #     card_header("Card 2 header"),
-          #     p("Card 2 body"),
-          #     textInput("text", "Add text", ""),
-          #   ), 
-          #   
-          #   checkboxGroupInput(
-          #     "species", "Filter by species",
-          #     choices = unique(iris$Species), 
-          #     selected = unique(iris$Species)
-          #   ),
-          #   
-          #   card( 
-          #     card_header("Card 1 header"),
-          #     p("Card 1 body"),
-          #     sliderInput("slider", "Slider", 0, 10, 5),
-          #   ),
-          #   card( 
-          #     card_header("Card 1 header"),
-          #     p("Card 1 body"),
-          #     sliderInput("slider", "Slider", 0, 10, 5),
-          #   )
-          # ),
-          # 
+          selectizeInput(
+            'e2', '2. Multi-select', choices = colnames(mtcars), multiple = TRUE
+          ),
+          selectInput(
+            ns("in3"),
+            'Options',
+            colnames(mtcars),
+            multiple=TRUE, 
+            selectize=FALSE),
+
           footer = tagList(
             modalButton("Cancelar"),
             # actionButton(ns("resetar_filtros"), "Resetar Filtros"),
@@ -204,6 +137,8 @@ server_filtro <- function(id, base_inicial) {
       ## Social ---------
       filtros$faixaetar <- input$filtro_faixa_etaria
       filtros$sexo <- input$filtro_sexo
+      filtros$ufnasc <- input$filtro_ufnasc
+      filtros$ufresid <- input$filtro_ufresid
       removeModal()
     })
     
@@ -215,6 +150,12 @@ server_filtro <- function(id, base_inicial) {
       }
       if (!is.null(filtros$sexo) && length(filtros$sexo) > 0) {
         df <- df[df$sexo %in% filtros$sexo, ]
+      }
+      if (!is.null(filtros$ufnasc) && length(filtros$ufnasc) > 0) {
+        df <- df[df$ufnasc %in% filtros$ufnasc, ]
+      }
+      if (!is.null(filtros$ufresid) && length(filtros$ufresid) > 0) {
+        df <- df[df$ufresid %in% filtros$ufresid, ]
       }
       df
     })

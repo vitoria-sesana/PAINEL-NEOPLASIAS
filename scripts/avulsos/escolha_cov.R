@@ -9,14 +9,14 @@ base <-
 
 # social ------------------------------------------------------------------
 
-base$escolari %>% table
+
 base$idade %>% table # nao aparece no filtro 
 base$sexo %>% table
 base$faixaetar %>% table
 base$ufnasc %>% table
 base$ufresid %>% table
-base$ibge %>% table # não usar
-base$cidade %>% table # usar
+# base$ibge %>% table # não usar
+# base$cidade %>% table # usar
 
 
 # diagnostico -------------------------------------------------------------
