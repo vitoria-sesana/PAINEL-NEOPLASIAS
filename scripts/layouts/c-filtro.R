@@ -44,7 +44,12 @@ server_filtro <- function(id, base_inicial) {
       dsccido = NULL,
       cici = NULL,
       cicigrup = NULL,
-      cicisubgru = NULL
+      cicisubgru = NULL,
+      
+      # tratamento
+      naotrat = NULL,
+      tratamento = NULL,
+      trathosp = NULL
       
       )
 
@@ -150,7 +155,7 @@ server_filtro <- function(id, base_inicial) {
             
             ## Tumor infantil-------------------
             column(4,
-                   h4("Características de tumores infantis"),
+                   h4("Tumores infantis"),
                    
                    #### infantil -------
                    selectInput(
@@ -162,7 +167,7 @@ server_filtro <- function(id, base_inicial) {
                    
                    #### grupo infantil -------
                    selectInput(
-                     ns("filtro_dcicigrup"),
+                     ns("filtro_cicigrup"),
                      'Grupo:',
                      sort(unique(df$cicigrup)),
                      multiple=TRUE, 
@@ -178,16 +183,67 @@ server_filtro <- function(id, base_inicial) {
             )
             
           ),
-
-          selectizeInput(
-            'e2', '2. Multi-select', choices = colnames(mtcars), multiple = TRUE
+          br(),
+          hr(),
+          fluidRow(
+            
+            ## Diagnostico -------------------
+            column(
+              3,
+              h4("Diagnóstico"),
+            ),
+            
+            ## Tratamento -------------------
+            
+            column(
+              3,
+              h4("Tratamento"),
+              
+              #### tratamento realizados -------
+              selectInput(
+                ns("filtro_tratamento"),
+                'Tratamentos realizados:',
+                sort(unique(df$tratamento)),
+                multiple=TRUE, 
+                selectize=FALSE),
+              
+              #### tratamento hospital -------
+              selectInput(
+                ns("filtro_trathosp"),
+                'Tratamentos realizados no hospital:',
+                sort(unique(df$trathosp)),
+                multiple=TRUE, 
+                selectize=FALSE),
+              
+              #### Razão de não trat -------
+              selectInput(
+                ns("filtro_naotrat"),
+                'Razão de não tratamento:',
+                sort(unique(df$naotrat)),
+                multiple=TRUE, 
+                selectize=FALSE),
+            ),
+            
+            
+            ## Reciditiva -------------------
+            column(
+              3,
+              h4("Reciditva"),
+              ),
+            
+            ## Habilitação -------------------
+            column(
+              3,
+              h4("Habilitação"),
+            ),
+            
+          
           ),
-          selectInput(
-            ns("in3"),
-            'Options',
-            colnames(mtcars),
-            multiple=TRUE, 
-            selectize=FALSE),
+          
+          
+          
+          
+          
 
           footer = tagList(
             modalButton("Cancelar"),
@@ -220,6 +276,13 @@ server_filtro <- function(id, base_inicial) {
       filtros$cici <- input$filtro_cici
       filtros$cicigrup  <- input$filtro_cicigrup
       filtros$cicisubgru <- input$filtro_cicisubgru
+      
+      
+      
+      ## Trtatamento ----------------
+      filtros$tratamento <- input$filtro_tratamento
+      filtros$trathosp  <- input$filtro_trathosp
+      filtros$naotrat <- input$filtro_naotrat
       removeModal()
     })
     
@@ -262,6 +325,15 @@ server_filtro <- function(id, base_inicial) {
       if (!is.null(filtros$cicisubgru) && length(filtros$cicisubgru) > 0) {
         df <- df[df$cicisubgru %in% filtros$cicisubgru, ]
       }
+      if (!is.null(filtros$tratamento ) && length(filtros$tratamento ) > 0) {
+        df <- df[df$tratamento  %in% filtros$tratamento , ]
+      }
+      if (!is.null(filtros$trathosp) && length(filtros$trathosp) > 0) {
+        df <- df[df$trathosp %in% filtros$trathosp, ]
+      }
+      if (!is.null(filtros$naotrat) && length(filtros$naotrat) > 0) {
+        df <- df[df$naotrat %in% filtros$naotrat, ]
+      }
       
       df
     })
@@ -269,7 +341,7 @@ server_filtro <- function(id, base_inicial) {
     output$texto_filtro <- renderText({
       react_base_filtrada() %>% 
         as.data.frame() %>% 
-        select(cicigrup) %>% 
+        select(trathosp) %>% 
         unique() %>% 
         as.character()
     })

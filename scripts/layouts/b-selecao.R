@@ -95,7 +95,11 @@ server_selecao <- function(id) {
             "dsccido",
             "cici",
             "cicigrup",
-            "cicisubgru"
+            "cicisubgru",
+            "naotrat",
+            "tratamento",
+            "trathosp",
+            "tratfapos"
           ))
         ) %>%
         mutate(

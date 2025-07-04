@@ -29,7 +29,13 @@ base_principal <-
     dsccido,
     cici,
     cicigrup,
-    cicisubgru
+    cicisubgru,
+    
+    # tratamento 
+    naotrat,
+    tratamento,
+    trathosp
+    
   ) 
 
 

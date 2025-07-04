@@ -9,7 +9,6 @@ base <-
 
 # social ------------------------------------------------------------------
 
-
 base$idade %>% table # nao aparece no filtro 
 base$sexo %>% table
 base$faixaetar %>% table
@@ -73,14 +72,13 @@ base$meta04 %>% table
 
 # tratamento --------------------------------------------------------------
 
-base$dttrat # data
+#base$dttrat # data
 base$naotrat %>% table # recusa de tratamento !!!
 base$tratamento %>% table
-base$tratamento %>% table
-base$tratamento %>% table
-base$tratamento %>% table
-base$tratamento %>% table
-base$tratamento %>% table
+base$trathosp %>% table
+# base$tratfantes %>% table # n
+# base$tratfapos %>% table
+
 
 # data da ultima infor ----------------------------------------------------
 
