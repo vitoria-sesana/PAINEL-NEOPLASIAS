@@ -6,7 +6,7 @@ library(plotly)
 library(rlang)
 
 # Função geral para estimar e plotar função de risco por grupo
-plot_hazard_por_grupo <- function(data, time_var, status_var, group_var) {
+plot_hazard_por_grupo <- function(data, time_var, status_var, group_var, nome_tempo) {
   
   # Captura programática das variáveis
   time_var <- rlang::ensym(time_var)
@@ -61,7 +61,7 @@ plot_hazard_por_grupo <- function(data, time_var, status_var, group_var) {
   
   fig <- fig %>% layout(
     title = "Função de Risco Estimada por Grupo",
-    xaxis = list(title = "Tempo"),
+    xaxis = list(title = nome_tempo),
     yaxis = list(title = "Função de risco"),
     legend = list(title = list(text = "Grupo"))
   )

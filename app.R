@@ -84,7 +84,7 @@ server <- function(input, output, session) {
   base_inicial <- server_selecao("b-selecao")
   base_selecionada <- server_filtro("c-filtro", base_inicial)
   server_kaplan_meier("d-kaplan_meier", base_selecionada, base_inicial)
-  server_risco("e-funcao_risco", base_selecionada)
+  server_risco("e-funcao_risco", base_selecionada,base_inicial)
   server_log_rank("f-log_rank", base_selecionada)
   server_tabela("g-tabela", base_selecionada)
   server_sobre("h-sobre")

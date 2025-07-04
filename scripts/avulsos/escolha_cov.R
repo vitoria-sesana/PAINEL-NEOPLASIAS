@@ -22,10 +22,10 @@ base$ufresid %>% table
 # diagnostico -------------------------------------------------------------
 
 base$cateatend %>% table
-base$dtconsult %>% table
+base$dtconsult %>% table # n
 base$clinica %>% table
-base$diagprev %>% table
-base$dtdiag %>% table
+base$diagprev %>% table 
+base$dtdiag %>% table # n
 base$basediag %>% table
 base$anodiag %>% table 
 
@@ -35,12 +35,12 @@ base$topo %>% unique() %>% length()
 base$topogrup %>% unique() %>% length()
 base$desctopo %>% unique() %>% length() # tratar e utilizar no painel
 
-## morfologia ---
+## morfologia --- nao colocar, todas tem muitas observações
 base$morfo %>% table # morfologia
 base$cido %>% table
-base$dsccido %>% table
+base$dsccido %>% # só mostrar essa
 
-## estagio da doença -----
+## estagio da doença ----- 
 
 base$ec %>% table
 base$ecgrup %>% table
@@ -60,11 +60,10 @@ base$localtnm %>% table  # remover
 base$idmitotic %>% table
 base$psa %>% table # remover
 base$gleason %>% table # remover
-
 base$outracla %>% table ######## character ## remover?
 
 
-## metástase ------------
+## metástase ------------ não temos os códigos
 
 base$meta01 %>% table
 base$meta02 %>% table
@@ -83,8 +82,6 @@ base$tratamento %>% table
 base$tratamento %>% table
 base$tratamento %>% table
 
-
-
 # data da ultima infor ----------------------------------------------------
 
 base$dtultinfo %>% table
@@ -97,9 +94,9 @@ base$tratcons %>% table
 base$anodiag %>% table
 
 # Tumor infantil ----------------------------------------------------------
-base$cici %>% table
-base$cicigrup %>% table
-base$cicisubgru %>% table
+base$cici %>% unique
+base$cicigrup %>% unique
+base$cicisubgru %>% unique 
 
 # não faço ideia ----------------------------------------------------------
 

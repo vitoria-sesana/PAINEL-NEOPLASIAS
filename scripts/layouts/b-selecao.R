@@ -29,7 +29,6 @@ ui_selecao <- function(id) {
           base %>% 
             select(
               -topogrup,
-              -filtro_subtopo,
               # -dtdiag, 
               # -dttrat,
               # -dtultinfo,
@@ -83,11 +82,20 @@ server_selecao <- function(id) {
             input$selecionar_tempo,
             input$selecionar_covariavel,
             "indicadora",
+            # caracteristicas sociais
             "faixaetar",
             "sexo",
             "escolari",
             "ufnasc",
-            "ufresid"
+            "ufresid",
+            # caracteristicas dos tumores
+            "filtro_subtopo",
+            "ec",
+            "ecgrup",
+            "dsccido",
+            "cici",
+            "cicigrup",
+            "cicisubgru"
           ))
         ) %>%
         mutate(

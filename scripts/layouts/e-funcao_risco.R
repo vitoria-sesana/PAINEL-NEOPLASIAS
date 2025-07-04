@@ -12,7 +12,7 @@ ui_risco <- function(id) {
 }
 
 
-server_risco <- function(id, base_selecionada) {
+server_risco <- function(id, base_selecionada, base_inicial) {
   
   moduleServer(id, function(input, output, session) {
     
@@ -23,7 +23,8 @@ server_risco <- function(id, base_selecionada) {
         base, 
         time_var = tempo, 
         status_var = indicadora, 
-        group_var = covariavel)
+        group_var = covariavel,
+        nome_tempo = base_inicial$tempo())
       ggl
     })
     # sem sáídas ---------------------------------------------

@@ -13,7 +13,6 @@ base_principal <-
     topogrup,
     indicadora,
     tempo_dias, tempo_semanas, tempo_meses, tempo_anos,
-    filtro_subtopo,
     
     # social
     sexo,
@@ -21,7 +20,16 @@ base_principal <-
     faixaetar,
     escolari,
     ufnasc,
-    ufresid
+    ufresid,
+    
+    # tumor
+    filtro_subtopo,
+    ec,
+    ecgrup,
+    dsccido,
+    cici,
+    cicigrup,
+    cicisubgru
   ) 
 
 
@@ -53,6 +61,7 @@ library(dplyr)
 base_tratada <- base_principal
 
 variaveis_para_tratar <- intersect(colnames(base_tratada), unique(dicionario$variavel))
+variaveis_para_tratar
 
 for (variavel in variaveis_para_tratar) {
   

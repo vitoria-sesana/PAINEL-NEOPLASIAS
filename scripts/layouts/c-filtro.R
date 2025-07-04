@@ -29,11 +29,23 @@ server_filtro <- function(id, base_inicial) {
     # Reactive: valores filtros -----------
     
     filtros <- reactiveValues(
+      # filtros sociais
+      
       faixaetar = NULL,
       sexo = NULL,
       escolari = NULL,
       ufnasc = NULL,
-      ufresid = NULL
+      ufresid = NULL,
+      
+      # filtros tumores
+      filtro_subtopo = NULL,
+      ec = NULL,
+      ecgrup = NULL,
+      dsccido = NULL,
+      cici = NULL,
+      cicigrup = NULL,
+      cicisubgru = NULL
+      
       )
 
     # ObserveEvent: botão filtro  --------------------
@@ -98,27 +110,71 @@ server_filtro <- function(id, base_inicial) {
 
             ),
             
-            # Tumores -------------------
-            column(3,
-                   h4("Filtros - Coluna 2"),
-                   selectInput("filtro2_1", "Filtro 1:", choices = c("X", "Y", "Z")),
-                   sliderInput("filtro2_2", "Filtro 2:", min = 10, max = 500, value = 100),
-                   textInput("filtro2_3", "Filtro 3:")
+            ## Tumores -------------------
+            column(4,
+                   h4("Características do tumor"),
+                   
+                   #### subcategoria cids -------
+                   selectInput(
+                     ns("filtro_subtopo"),
+                     'Subcategoria CIDs:',
+                     sort(unique(df$filtro_subtopo)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+                   
+                   #### estagio clínico -------
+                   selectInput(
+                     ns("filtro_ec"),
+                     'Estadio Clínico:',
+                     sort(unique(df$ec)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+                   
+                   #### subcategoria estagio clínico -------
+                   selectInput(
+                     ns("filtro_ecgrup"),
+                     'Subcategoria Estadio Clínico:',
+                     sort(unique(df$ecgrup)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+                   
+                   #### descrição da morfologia -------
+                   selectInput(
+                     ns("filtro_dsccido"),
+                     'Descrição da Morofologia:',
+                     sort(unique(df$dsccido)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+                   
             ),
             
-            # Coluna 3
-            column(3,
-                   h4("Filtros - Coluna 3"),
-                   selectInput("filtro3_1", "Filtro 1:", choices = c("Red", "Green", "Blue")),
-                   sliderInput("filtro3_2", "Filtro 2:", min = 1, max = 10, value = 5),
-                   textInput("filtro3_3", "Filtro 3:")
-            ),
-            # Coluna 4
-            column(3,
-                   h4("Filtros - Coluna 4"),
-                   selectInput("filtro3_1", "Filtro 1:", choices = c("Red", "Green", "Blue")),
-                   sliderInput("filtro3_2", "Filtro 2:", min = 1, max = 10, value = 5),
-                   textInput("filtro3_3", "Filtro 3:")
+            ## Tumor infantil-------------------
+            column(4,
+                   h4("Características de tumores infantis"),
+                   
+                   #### infantil -------
+                   selectInput(
+                     ns("filtro_cici"),
+                     'Tumor infantil:',
+                     sort(unique(df$cici)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+                   
+                   #### grupo infantil -------
+                   selectInput(
+                     ns("filtro_dcicigrup"),
+                     'Grupo:',
+                     sort(unique(df$cicigrup)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+                   
+                   #### subgrupo infantil -------
+                   selectInput(
+                     ns("filtro_cicisubgru"),
+                     'Subgrupo:',
+                     sort(unique(df$cicisubgru)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
             )
             
           ),
@@ -153,6 +209,17 @@ server_filtro <- function(id, base_inicial) {
       filtros$escolari <- input$filtro_escolari
       filtros$ufnasc <- input$filtro_ufnasc
       filtros$ufresid <- input$filtro_ufresid
+      
+      ## Tumor ---------- 
+      filtros$filtro_subtopo <- input$filtro_subtopo
+      filtros$ec  <- input$filtro_ec 
+      filtros$ecgrup <- input$filtro_ecgrup 
+      filtros$dsccido <- input$filtro_dsccido
+      
+      ## Tumor infantil -------------
+      filtros$cici <- input$filtro_cici
+      filtros$cicigrup  <- input$filtro_cicigrup
+      filtros$cicisubgru <- input$filtro_cicisubgru
       removeModal()
     })
     
@@ -174,13 +241,35 @@ server_filtro <- function(id, base_inicial) {
       if (!is.null(filtros$ufresid) && length(filtros$ufresid) > 0) {
         df <- df[df$ufresid %in% filtros$ufresid, ]
       }
+      if (!is.null(filtros$filtro_subtopo) && length(filtros$filtro_subtopo) > 0) {
+        df <- df[df$filtro_subtopo %in% filtros$filtro_subtopo, ]
+      }
+      if (!is.null(filtros$ec) && length(filtros$ec) > 0) {
+        df <- df[df$ec %in% filtros$ec, ]
+      }
+      if (!is.null(filtros$ecgrup) && length(filtros$ecgrup) > 0) {
+        df <- df[df$ecgrup %in% filtros$ecgrup, ]
+      }
+      if (!is.null(filtros$dsccido) && length(filtros$dsccido) > 0) {
+        df <- df[df$dsccido %in% filtros$dsccido, ]
+      }
+      if (!is.null(filtros$cici ) && length(filtros$cici ) > 0) {
+        df <- df[df$cici  %in% filtros$cici , ]
+      }
+      if (!is.null(filtros$cicigrup) && length(filtros$cicigrup) > 0) {
+        df <- df[df$cicigrup %in% filtros$cicigrup, ]
+      }
+      if (!is.null(filtros$cicisubgru) && length(filtros$cicisubgru) > 0) {
+        df <- df[df$cicisubgru %in% filtros$cicisubgru, ]
+      }
+      
       df
     })
     
     output$texto_filtro <- renderText({
       react_base_filtrada() %>% 
         as.data.frame() %>% 
-        select(escolari) %>% 
+        select(cicigrup) %>% 
         unique() %>% 
         as.character()
     })
