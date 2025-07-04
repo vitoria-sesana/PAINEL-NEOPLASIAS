@@ -7,12 +7,16 @@ Terminar os filtros
 
 
 Modal para carregamento dos gráficos(PC, KP e Risco) 
+Tratar os nomes das classes
+Tratar os nomes dos cids (seleção)
+Tratar os nomes das covariáveis (seleção)
 
 
 Arrumar nome:
 	Dos eixos, títulos e legendas dos gráficos
 	Dos eixos, títulos e legendas das tabelas
 	Das caixas de seleção
+
 
 Arrumar: quando seleciona a covariável n aparece no filtro 
 Arrumar os códigos

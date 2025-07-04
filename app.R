@@ -20,7 +20,8 @@ source("scripts/layouts/c-filtro.R", encoding = "UTF-8")
 source("scripts/layouts/d-kaplan_meier.R", encoding = "UTF-8")
 source("scripts/layouts/e-funcao_risco.R", encoding = "UTF-8")
 source("scripts/layouts/f-log_rank.R", encoding = "UTF-8")
-source("scripts/layouts/g-sobre.R", encoding = "UTF-8")
+source("scripts/layouts/g-tabela.R", encoding = "UTF-8")
+source("scripts/layouts/h-sobre.R", encoding = "UTF-8")
 
 # Funções auxiliares ------------------------------------------------------
 
@@ -60,7 +61,11 @@ ui <- navbarPage(
           nav_panel(
             "Teste de Log-Rank", 
             ui_log_rank("f-log_rank")
-            )
+            ),
+          nav_panel(
+            "Tabela selecionada", 
+            ui_tabela("g-tabela")
+          )
           )
         )
       )
@@ -81,7 +86,8 @@ server <- function(input, output, session) {
   server_kaplan_meier("d-kaplan_meier", base_selecionada, base_inicial)
   server_risco("e-funcao_risco", base_selecionada)
   server_log_rank("f-log_rank", base_selecionada)
-  server_sobre("g-sobre")
+  server_tabela("g-tabela", base_selecionada)
+  server_sobre("h-sobre")
 }
 
 shinyApp(ui, server)

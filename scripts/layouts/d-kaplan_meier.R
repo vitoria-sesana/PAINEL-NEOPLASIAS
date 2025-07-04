@@ -3,8 +3,7 @@ ui_kaplan_meier <- function(id) {
   ns <- NS(id)
   
   tagList(
-    verbatimTextOutput(ns("texto_an")),
-    tableOutput(ns("tabela")),
+    br(),
     plotlyOutput(ns("gráfico_kp")),
     br(),
     tableOutput(ns("tabela_kp"))
@@ -15,20 +14,6 @@ ui_kaplan_meier <- function(id) {
 server_kaplan_meier <- function(id, base_selecionada, base_inicial) {
   moduleServer(id, function(input, output, session) {
     
-    output$texto_an <- renderText({
-      
-      base_selecionada$data() %>% 
-        class()
-    })
-    
-    ## tabela ------------------------------------------------------------------
-    
-    output$tabela <- renderTable({
-      base_selecionada$data() %>% 
-        head()
-    }
-    )
-
     ## tabela kaplan-meier -----------------------
 
     kaplan_meier <- reactive({

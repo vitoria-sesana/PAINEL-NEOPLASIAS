@@ -31,6 +31,7 @@ server_filtro <- function(id, base_inicial) {
     filtros <- reactiveValues(
       faixaetar = NULL,
       sexo = NULL,
+      escolari = NULL,
       ufnasc = NULL,
       ufresid = NULL
       )
@@ -50,14 +51,6 @@ server_filtro <- function(id, base_inicial) {
             column(3,
                    h4("Características Sociais"),
                    
-                   #### faixa etária ------------
-                   selectizeInput(
-                     ns("filtro_faixa_etaria"),
-                     "Faixa etária:",
-                     choices = sort(unique(df$faixaetar)),
-                     multiple = TRUE,
-                     selected = unique(df$faixaetar),
-                   ),
                    
                    #### sexo ---------------------
                    checkboxGroupInput(
@@ -66,6 +59,26 @@ server_filtro <- function(id, base_inicial) {
                      choices = unique(df$sexo),
                      selected = unique(df$sexo)
                    ),
+                   
+                   #### escolaridade ------------
+                   selectInput(
+                     ns("filtro_escolari"),
+                     'Escolaridade:',
+                     sort(unique(df$escolari)),
+                     multiple=TRUE, 
+                     selectize=FALSE),
+                   
+                   
+                   
+                   #### faixa etária ------------
+                   selectizeInput(
+                     ns("filtro_faixa_etaria"),
+                     "Faixa etária:",
+                     choices = sort(unique(df$faixaetar)),
+                     multiple = TRUE,
+                     selected = unique(df$faixaetar),
+                   ),
+                  
                    
                    #### ufnasc -----------------
                    selectInput(
@@ -137,6 +150,7 @@ server_filtro <- function(id, base_inicial) {
       ## Social ---------
       filtros$faixaetar <- input$filtro_faixa_etaria
       filtros$sexo <- input$filtro_sexo
+      filtros$escolari <- input$filtro_escolari
       filtros$ufnasc <- input$filtro_ufnasc
       filtros$ufresid <- input$filtro_ufresid
       removeModal()
@@ -151,6 +165,9 @@ server_filtro <- function(id, base_inicial) {
       if (!is.null(filtros$sexo) && length(filtros$sexo) > 0) {
         df <- df[df$sexo %in% filtros$sexo, ]
       }
+      if (!is.null(filtros$escolari) && length(filtros$escolari) > 0) {
+        df <- df[df$escolari %in% filtros$escolari, ]
+      }
       if (!is.null(filtros$ufnasc) && length(filtros$ufnasc) > 0) {
         df <- df[df$ufnasc %in% filtros$ufnasc, ]
       }
@@ -163,7 +180,7 @@ server_filtro <- function(id, base_inicial) {
     output$texto_filtro <- renderText({
       react_base_filtrada() %>% 
         as.data.frame() %>% 
-        select(faixaetar) %>% 
+        select(escolari) %>% 
         unique() %>% 
         as.character()
     })

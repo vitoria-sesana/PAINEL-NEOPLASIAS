@@ -10,28 +10,28 @@
 
 - escolher com IC ou sem IC
 
-RETORNAR: Base(tempo, covariável, indicadora) filtrada por CID
+RETORNAR: Base(tempo, covariável, indicadora) filtrada por CIDs
 
-outras opções: 
-	- escolher região
-	- pacientes com recidiva
-	- tratamento recebido  
+2) Filtro avançado
+
+- Características sociais
+- Características do tumor
+- Sobre tratamento
+- Rediciva
+- Habilitação
+- Diagnóstico
 
 3) Gráfico Kaplan Meier
 
 4) tabela de sobrevivência
-	com dowload
 
 5) Gráfico Estimação não paramétrica da função de risco
-	tem que ter com e sem ic também
+	tem que ter com e sem ic também?
 
 6) tabela de sobrevivência 
-	com dowload
 
 7) calcular log-rank
 
-8) resetar filtros  
-
-9) download
+9) downloads
 
 
