@@ -4,7 +4,7 @@ ui_risco <- function(id) {
   ns <- NS(id)
   tagList(
     hr(),
-    
+    h2("Gráfico da Função de Risco Estimada"),
     # Input: gráfico risco estimada -------------------------
     plotlyOutput(ns("gráfico_risco")),
   )

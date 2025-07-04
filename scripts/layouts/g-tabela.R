@@ -5,7 +5,7 @@ ui_tabela <- function(id) {
     hr(),
     
     # Input: tabela selecionada ------------------------------------------------
-    tableOutput(ns("tabela_selecionada")),
+    DT::DTOutput(ns("tabela_selecionada")),
     
   )
   
@@ -16,8 +16,11 @@ server_tabela <- function(id, base_selecionada) {
   moduleServer(id, function(input, output, session) {
     
     # Render: tabela log-rank --------------------------------------------------
-    output$tabela_selecionada <- renderTable(
-      base_selecionada$data() 
+    output$tabela_selecionada <- DT::renderDT(
+      base_selecionada$data(),
+      options = list(scrollX = TRUE),
+      class = 'display nowrap'
+
     )
     
   })

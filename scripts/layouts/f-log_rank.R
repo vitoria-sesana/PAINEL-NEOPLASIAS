@@ -5,7 +5,7 @@ ui_log_rank <- function(id) {
     hr(),
     
     # Input: tabela log-rank ---------------------------------------------------
-    tableOutput(ns("tabela_log_rank")),
+    DT::DTOutput(ns("tabela_log_rank")),
     
     # Input: texto log-rank 1 classe -------------------------------------------
     textOutput(ns("texto_log_rank"))
@@ -47,7 +47,7 @@ server_log_rank <- function(id, base_selecionada) {
     })
     
     # Render: tabela log-rank --------------------------------------------------
-    output$tabela_log_rank <- renderTable(
+    output$tabela_log_rank <-  DT::renderDT(
       base()
       )
     

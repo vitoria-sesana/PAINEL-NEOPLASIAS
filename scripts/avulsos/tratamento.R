@@ -8,53 +8,53 @@ base_principal <-
   base %>% 
   mutate(
     filtro_subtopo = paste0(topo, " - ", stringr::str_to_title(base$desctopo))
-  ) %>% 
-  select(
-    topogrup,
-    indicadora,
-    tempo_dias, tempo_semanas, tempo_meses, tempo_anos,
-    
-    # social
-    sexo,
-    idade,
-    faixaetar,
-    escolari,
-    ufnasc,
-    ufresid,
-    
-    # tumor
-    filtro_subtopo,
-    ec,
-    ecgrup,
-    dsccido,
-    cici,
-    cicigrup,
-    cicisubgru,
-    
-    # tratamento 
-    naotrat,
-    tratamento,
-    trathosp,
-    
-    # diagnostico
-    clinica,
-    diagprev,
-    basediag,
-    anodiag,  
-    cateatend, 
-    
-    # habilitação
-    habilit,
-    habilit1,
-    
-    # Recidiva
-    recnenhum,
-    reclocal,
-    recregio,
-    recdist
-    
-    
   ) 
+  # select(
+  #   topogrup,
+  #   indicadora,
+  #   tempo_dias, tempo_semanas, tempo_meses, tempo_anos,
+  #   
+  #   # social
+  #   sexo,
+  #   idade,
+  #   faixaetar,
+  #   escolari,
+  #   ufnasc,
+  #   ufresid,
+  #   
+  #   # tumor
+  #   filtro_subtopo,
+  #   ec,
+  #   ecgrup,
+  #   dsccido,
+  #   cici,
+  #   cicigrup,
+  #   cicisubgru,
+  #   
+  #   # tratamento 
+  #   naotrat,
+  #   tratamento,
+  #   trathosp,
+  #   
+  #   # diagnostico
+  #   clinica,
+  #   diagprev,
+  #   basediag,
+  #   anodiag,  
+  #   cateatend, 
+  #   
+  #   # habilitação
+  #   habilit,
+  #   habilit1,
+  #   
+  #   # Recidiva
+  #   recnenhum,
+  #   reclocal,
+  #   recregio,
+  #   recdist
+  #   
+  #   
+  # ) 
 
 
 dicionario <- 

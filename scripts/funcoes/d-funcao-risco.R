@@ -60,7 +60,7 @@ plot_hazard_por_grupo <- function(data, time_var, status_var, group_var, nome_te
   }
   
   fig <- fig %>% layout(
-    title = "Função de Risco Estimada por Grupo",
+    # title = "Função de Risco Estimada por Grupo",
     xaxis = list(title = nome_tempo),
     yaxis = list(title = "Função de risco"),
     legend = list(title = list(text = "Grupo"))

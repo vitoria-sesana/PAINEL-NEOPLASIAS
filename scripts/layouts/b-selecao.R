@@ -6,40 +6,19 @@ ui_selecao <- function(id) {
     hr(),
     
     ## Input: Cid ----------------------------------------
-    # selectInput(
-    #   ns("selecionar_cid"),
-    #   "Selecione o CID:",
-    #   choices = unique(base$topogrup)
-    # ),
-    
-    selectizeInput(
+    selectInput(
       ns("selecionar_cid"),
       "Selecione o CID:",
-      choices = sort(unique(base$topogrup)),
-      selected = sort(unique(base$topogrup))[1],
-      multiple = TRUE
+      choices = sort(unique(base$topogrup))
     ),
     
     ## Input: Covariável ---------------------------------
     selectInput(
       ns("selecionar_covariavel"),
       "Selecione a covariável de interesse",
-      choices = c(
-        colnames(
-          base %>% 
-            select(
-              -topogrup,
-              # -dtdiag, 
-              # -dttrat,
-              # -dtultinfo,
-              # -ultinfo,
-              -indicadora,
-              -tempo_dias, -tempo_anos, -tempo_semanas, -tempo_meses))
-      ),
-      selected = "sexo"
+      choices = dicionario_nomes,
+      selected = "Sexo do paciente"
     ),
-    
-    textOutput(ns("texto_cov")),
     
     ## Input: Tipo de tempo ------------------------------
     radioButtons(
@@ -61,12 +40,6 @@ server_selecao <- function(id) {
   moduleServer(id, function(input, output, session) {
 
     ns <- session$ns
-    
-    # texto ponto de corte
-    output$texto_cov <- renderText({
-      req(corte())
-      paste(corte(), is.null( corte()))
-    })
 
   ## Reactive: tratamento da base de dados -----------------------------------
 
@@ -240,18 +213,6 @@ server_selecao <- function(id) {
       as.character(input$selecionar_covariavel)
     })
 
-    #### classe da covariável
-    classe_covariavel <- reactive({
-      
-      req(input$selecionar_covariavel)
-      
-      quantidade_elementos_covariavel <- 
-        base %>% 
-        select(input$selecionar_covariavel) %>% 
-        unique() %>% 
-        nrow()
-    })
-
     ## Intervalo de confiança --------------------------------------------------
 
     escolha_intervalo_confianca <- reactive({
@@ -272,7 +233,6 @@ server_selecao <- function(id) {
       list(
         data = data,
         covariavel = nome_covariavel,
-        classe = classe_covariavel,
         tempo = nome_tempo,
         IC = escolha_intervalo_confianca,
         corte = corte

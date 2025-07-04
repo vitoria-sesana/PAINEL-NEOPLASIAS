@@ -1,4 +1,5 @@
 rm(list=ls())
+
 # Bibliotecas -------------------------------------------------------------
 library(shiny)
 library(data.table)
@@ -65,7 +66,8 @@ ui <- navbarPage(
             "Tabela selecionada", 
             ui_tabela("g-tabela")
           )
-          )
+          ),
+        br(),
         )
       )
   ),
@@ -73,8 +75,8 @@ ui <- navbarPage(
   ## informações ---------------------------------------------------------
   navbarMenu(
     "Sobre",
-    tabPanel("Metodologia", ui_sobre("g_sobre")),
-    tabPanel("Membros", "Leticía, Mario e Vitória")
+    tabPanel("Metodologia", ui_sobre("g_sobre"))
+    # tabPanel("Membros", "Leticía, Mario e Vitória")
   )
 )
 
