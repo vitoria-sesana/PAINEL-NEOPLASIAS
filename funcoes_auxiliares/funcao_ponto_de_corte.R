@@ -8,12 +8,12 @@
 
 func_ponto_corte <- 
   function(base, tempo, evento, variavel_continua, minprop = 0.1) {
-  
+    
     require(survival)
     require(maxstat)
-
+    
     formula <- as.formula(paste0("Surv(", tempo, ", ", evento, ") ~ ", variavel_continua))
-  
+    
     cut <- maxstat::maxstat.test(
       formula,
       data = base,
@@ -21,7 +21,7 @@ func_ponto_corte <-
       pmethod = "none",
       minprop = minprop
     )
-  
+    
     return(cut)
   }
 
@@ -47,4 +47,6 @@ func_ponto_corte_grafico <-
       ) +
       theme_minimal()
     ggplotly(gg_cut)
-    }
+  }
+
+

@@ -1,32 +1,15 @@
-# Função para chamar as bases necessárias pro painel ----------------------
- 
-# base <-
-#   arrow::read_parquet(
-#     "bases/base_app.parquet"
-#   )
-
-# base <-
-#   arrow::read_parquet(
-#     "bases/base_app_completo.parquet"
-#   )
-
-base <- 
-  arrow::read_parquet(
-    "bases/base_final.parquet"
-  )
-
 dicionario_classe <- 
   readxl::read_xlsx(
-    path = "bases/dicionario.xlsx",
+    path = here::here("bases", "dicionario.xlsx"),
     sheet = "classe"
-  ) %>% 
+  ) %>%
   rownames_to_column()
 
 dicionario_dominio <- 
   readxl::read_xlsx(
-    path = "bases/dicionario.xlsx",
+    path = here::here("bases", "dicionario.xlsx"),
     sheet = "dominio"
-  ) %>% 
+  ) %>%
   rownames_to_column()
 
 colunas_numericas <- 
@@ -35,6 +18,7 @@ colunas_numericas <-
   select(campo)  
 
 covariaveis_numericas <- colunas_numericas$campo
+
 
 # dicionario ------------
 
@@ -143,6 +127,3 @@ dicionario_nomes <- c(
   # "Tempo (meses)" = "tempo_meses",
   # "Tempo (anos)" = "tempo_anos"
 )
-
-
-

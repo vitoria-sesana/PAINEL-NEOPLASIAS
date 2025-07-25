@@ -1,94 +1,89 @@
-rm(list=ls())
-
-# Bibliotecas -------------------------------------------------------------
 library(shiny)
-library(data.table)
 library(tidyverse)
-library(data.table)
+require(survival)
+require(survminer)
+library(rlang)
+library(muhaz)
+library(bshazard)
 library(shinyjs)
 library(shinydashboard)
 library(bslib)
-require(survival)
-require(survminer)
-require(plotly)
+library(plotly)
 
-# Layouts: ui e server ----------------------------------------------------
+# módulos -----------------------------------------------------------------
+source("layouts/mod_selecao.R")
+source("layouts/mod_selecao_avancada.R")
+source("layouts/mod_kaplan_meier.R")
+source("layouts/mod_risco.R")
+source("layouts/mod_log_rank.R")
+source("layouts/mod_sobre.R")
+source("funcoes_auxiliares/funcao_log_rank.R")
+source("funcoes_auxiliares/funcao_chamar_bases.R")
+source("funcoes_auxiliares/funcao_ponto_de_corte.R")
 
-source("scripts/layouts/a-homepage.R", encoding = "UTF-8")
-source("scripts/layouts/b-selecao.R", encoding = "UTF-8")
-source("scripts/layouts/c-filtro.R", encoding = "UTF-8")
-source("scripts/layouts/d-kaplan_meier.R", encoding = "UTF-8")
-source("scripts/layouts/e-funcao_risco.R", encoding = "UTF-8")
-source("scripts/layouts/f-log_rank.R", encoding = "UTF-8")
-source("scripts/layouts/g-tabela.R", encoding = "UTF-8")
-source("scripts/layouts/h-sobre.R", encoding = "UTF-8")
-
-# Funções auxiliares ------------------------------------------------------
-
-source("scripts/funcoes/a-chamar_bases.R", encoding = "UTF-8")
-source("scripts/funcoes/b-ponto_de_corte.R", encoding = "UTF-8")
-source("scripts/funcoes/d-funcao-risco.R", encoding = "UTF-8")
-source("scripts/funcoes/e-log_rank.R", encoding = "UTF-8")
-
-# UI ----------------------------------------------------------------------
-
-ui <- navbarPage(
+ui <- ui <- navbarPage(
   "Painel Neoplasias",
-
-  # análise de kaplan meier -------------------------------------------------
-  # tabPanel(
-  #   title = "Home",
-  #   ui_homepage("a-homepage")
-  # ),
-  
   tabPanel(
     title = "Análise Não Paramétrica",
     sidebarLayout(
       sidebarPanel(
-        ui_selecao("b-selecao"),
-        ui_filtro("c-filtro")
-        ),
+        helpText("Escolha uma variável numérica da base para visualizar o histograma."),
+        mod_selecao_ui("selecao"),
+        mod_selecao_avancada_ui("selecao_avancada")
+      ),
       mainPanel(
         navset_tab( 
           nav_panel(
             "Kaplan Meier",
-            ui_kaplan_meier("d-kaplan_meier")
-            ), 
+            mod_kaplan_meier_ui("kaplan_meier")
+          ), 
           nav_panel(
             "Taxa de Risco", 
-            ui_risco("e-funcao_risco")
-            ), 
+            mod_risco_ui("risco")
+          ), 
           nav_panel(
             "Teste de Log-Rank", 
-            ui_log_rank("f-log_rank")
-            ),
-          nav_panel(
-            "Tabela selecionada", 
-            ui_tabela("g-tabela")
-          )
-          ),
+            mod_log_rank_ui("log_rank")
+            )
+        ),
         br(),
-        )
       )
+    )
   ),
   
   ## informações ---------------------------------------------------------
   navbarMenu(
     "Sobre",
-    tabPanel("Metodologia", ui_sobre("g_sobre"))
+    tabPanel("Metodologia", ui_sobre("sobre"))
     # tabPanel("Membros", "Leticía, Mario e Vitória")
   )
 )
 
-# server ------------------------------------------------------------------
 server <- function(input, output, session) {
-  base_inicial <- server_selecao("b-selecao")
-  base_selecionada <- server_filtro("c-filtro", base_inicial)
-  server_kaplan_meier("d-kaplan_meier", base_selecionada, base_inicial)
-  server_risco("e-funcao_risco", base_selecionada, base_inicial)
-  server_log_rank("f-log_rank", base_selecionada)
-  server_tabela("g-tabela", base_selecionada)
-  server_sobre("h-sobre")
+  # Base de dados reativa
+  dados <- reactiveFileReader(
+    intervalMillis = 5000,  # atualiza a cada 5 segundos
+    session = session,
+    filePath = "bases/base_pequena.parquet",
+    readFunc = arrow::read_parquet
+  )
+  
+  # layouts --------------------------------------------------------------------
+  saida_selecao <- 
+    mod_selecao_server("selecao", dados)
+  saida_selecao_avancada <- 
+    mod_selecao_avancada_server("selecao_avancada",
+                                saida_selecao = saida_selecao)
+  
+  mod_kaplan_meier_server("kaplan_meier", 
+                        saida_selecao = saida_selecao,
+                        saida_selecao_avancada = saida_selecao_avancada)
+  mod_risco_server("risco", 
+                        saida_selecao = saida_selecao,
+                        saida_selecao_avancada = saida_selecao_avancada)
+  mod_log_rank_server("log_rank",
+                      saida_selecao_avancada = saida_selecao_avancada)
+  
 }
 
 shinyApp(ui, server)

@@ -1,32 +1,30 @@
-ui_log_rank <- function(id) {
+mod_log_rank_ui <- function(id) {
   ns <- NS(id)
   
   tagList(
-    hr(),
-    
     # Input: tabela log-rank ---------------------------------------------------
-    DT::DTOutput(ns("tabela_log_rank")),
+    tableOutput(ns("TABELA_LOG_RANK")),
     
     # Input: texto log-rank 1 classe -------------------------------------------
-    textOutput(ns("texto_log_rank"))
+    textOutput(ns("TEXTO_LOG_RANK"))
   )
   
 }
 
 
-server_log_rank <- function(id, base_selecionada) {
+mod_log_rank_server <- function(id, saida_selecao_avancada) {
   moduleServer(id, function(input, output, session) {
     
     # Reactive: base para tabela log-rank --------------------------------------
-    base <- reactive({
+    saida_log_rank <- reactive({
       
-      base_log_rank <- base_selecionada$data() 
+      base <- saida_selecao_avancada$data_selecionada_avancada() 
       
       ## Calculando log-rank
-      if (length(unique(base_log_rank$covariavel)) > 1) {
+      if (length(unique(base$covariavel)) > 1) {
         tabela_log_rank <- 
-          funcao_logrank(
-            base = base_log_rank,
+          funcao_log_rank(
+            base = base,
             tempo = "tempo",
             evento = "indicadora",
             variavel = "covariavel"
@@ -47,13 +45,13 @@ server_log_rank <- function(id, base_selecionada) {
     })
     
     # Render: tabela log-rank --------------------------------------------------
-    output$tabela_log_rank <-  DT::renderDT(
-      base()
-      )
+    output$TABELA_LOG_RANK <-  renderTable({
+      saida_log_rank()
+    })
     
     # Render: texto log-rank 1 classe ------------------------------------------
-    output$texto_log_rank <- renderText({
-      if (is.null(base())) {
+    output$TEXTO_LOG_RANK <- renderText({
+      if (is.null(saida_log_rank())) {
         "É necessário que a covariável selecionada tenha duas ou mais classes! Verifique a covariável selecionada e seus filtros."
       }
       

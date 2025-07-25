@@ -5,11 +5,11 @@ ui_sobre <- function(id) {
     shinyBS::bsCollapse(
       id = ns("sobre"),
       shinyBS::bsCollapsePanel("Sobre",
-                      "As classificações utilizadas neste estudo foram baseadas nos códigos da Classificação Internacional de Doenças – 10ª Revisão (CID-10), com foco específico nas neoplasias malignas localizadas em estruturas torácicas não respiratórias, ossos, pele, tecidos moles, sistema linfático e órgãos hematopoéticos. Os códigos selecionados englobam tanto as categorias principais (topogrupo), como C37 a C49, quanto suas subdivisões específicas (topo), permitindo uma análise mais refinada da localização anatômica dos tumores.
+                               "As classificações utilizadas neste estudo foram baseadas nos códigos da Classificação Internacional de Doenças – 10ª Revisão (CID-10), com foco específico nas neoplasias malignas localizadas em estruturas torácicas não respiratórias, ossos, pele, tecidos moles, sistema linfático e órgãos hematopoéticos. Os códigos selecionados englobam tanto as categorias principais (topogrupo), como C37 a C49, quanto suas subdivisões específicas (topo), permitindo uma análise mais refinada da localização anatômica dos tumores.
 Essa categorização é importante para compreender a distribuição topográfica das neoplasias e suas possíveis implicações clínicas e prognósticas, especialmente em análises de sobrevida ou risco de morte. Além disso, o uso de códigos padronizados garante a reprodutibilidade e a comparabilidade dos achados com outros estudos epidemiológicos baseados em dados do Sistema de Informações sobre Mortalidade ou registros hospitalares.",
-                      style = "info"
-                      )
-      ),
+                               style = "info"
+      )
+    ),
     hr(),
     shinyBS::bsCollapse(
       id = ns("metodologia4"),
@@ -56,6 +56,6 @@ Essa categorização é importante para compreender a distribuição topográfic
 server_sobre <- function(id) {
   moduleServer(id, function(input, output, session) {
     
-
+    
   })
 }

@@ -1,6 +1,6 @@
 # Função para cálculo do teste de log-rank --------------------------------
 
-funcao_logrank <- function(base, tempo, evento, variavel) {
+funcao_log_rank <- function(base, tempo, evento, variavel) {
   # Pacotes necessários
   require(survival)
   require(dplyr)

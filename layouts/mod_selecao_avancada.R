@@ -1,14 +1,4 @@
-# Layout: filtragem avançada -----------------------------------------------
-# recebe a base de dados com todas as colunas
-# base de dados completa
-# ponto de corte
-# covariavel
-# variavel tempo
-
-# pegar a base, filtrar ela e enviar ela após o botão
-# resetar o filtro novamente (pegar só a base enviada)
-
-ui_filtro <- function(id) {
+mod_selecao_avancada_ui <- function(id) {
   ns <- NS(id)
   tagList(
     hr(),
@@ -17,14 +7,14 @@ ui_filtro <- function(id) {
     actionButton(ns("botao_filtro"),"Filtro Avançado"),
     br(),
     hr()
-    )
+  )
 }
 
-server_filtro <- function(id, base_inicial) {
+
+mod_selecao_avancada_server <- function(id, saida_selecao) {
   moduleServer(id, function(input, output, session) {
     
     ns <- session$ns
-    
     # Reactive: valores filtros -----------
     
     filtros <- reactiveValues(
@@ -67,12 +57,12 @@ server_filtro <- function(id, base_inicial) {
       reclocal = NULL,
       recregio = NULL,
       recdist = NULL
-      )
-
+    )
+    
     # ObserveEvent: botão filtro  --------------------
     observeEvent(input$botao_filtro,{
       
-      df <- base_inicial$data()
+      df <- saida_selecao$data_selecionada()
       
       showModal(
         modalDialog(
@@ -111,7 +101,7 @@ server_filtro <- function(id, base_inicial) {
                      multiple = TRUE,
                      selected = unique(df$faixaetar),
                    ),
-                  
+                   
                    
                    #### ufnasc -----------------
                    selectInput(
@@ -128,7 +118,7 @@ server_filtro <- function(id, base_inicial) {
                      sort(unique(df$ufresid)),
                      multiple=TRUE, 
                      selectize=FALSE),
-
+                   
             ),
             
             ## Tumores -------------------
@@ -316,7 +306,7 @@ server_filtro <- function(id, base_inicial) {
                 'Recidiva a distância/metástase:',
                 choices = unique(df$recdist),
                 selected = unique(df$recdist)
-                ),
+              ),
             ),
             ## Habilitação -------------------
             column(
@@ -340,9 +330,9 @@ server_filtro <- function(id, base_inicial) {
                 selectize=FALSE),
             ),
             
-          
+            
           ),
-
+          
           footer = tagList(
             modalButton("Cancelar"),
             # actionButton(ns("resetar_filtros"), "Resetar Filtros"),
@@ -403,7 +393,7 @@ server_filtro <- function(id, base_inicial) {
     
     # Reactive: filtros --------------------------------------------------------
     react_base_filtrada <- reactive({
-      df <- base_inicial$data()
+      df <- saida_selecao$data_selecionada()
       if (!is.null(filtros$faixaetar) && length(filtros$faixaetar) > 0) {
         df <- df[df$faixaetar %in% filtros$faixaetar, ]
       }
@@ -485,12 +475,12 @@ server_filtro <- function(id, base_inicial) {
       
       df
     })
-
+    
     # Saída: -------------------------------------------------------------------
     
     return(
       list(
-        data = react_base_filtrada
+        data_selecionada_avancada = react_base_filtrada
       )
     )
   })
