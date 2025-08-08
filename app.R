@@ -16,6 +16,7 @@ source("layouts/mod_selecao_avancada.R")
 source("layouts/mod_kaplan_meier.R")
 source("layouts/mod_risco.R")
 source("layouts/mod_log_rank.R")
+source("layouts/aba_semiparametrica/SP1_selecao.R")
 source("layouts/mod_sobre.R")
 source("funcoes_auxiliares/funcao_log_rank.R")
 source("funcoes_auxiliares/funcao_chamar_bases.R")
@@ -27,7 +28,7 @@ ui <- ui <- navbarPage(
     title = "Análise Não Paramétrica",
     sidebarLayout(
       sidebarPanel(
-        helpText("Escolha uma variável numérica da base para visualizar o histograma."),
+        helpText("Escolha e filtre as opções abaixo para visualizar os resultados."),
         mod_selecao_ui("selecao"),
         mod_selecao_avancada_ui("selecao_avancada")
       ),
@@ -51,6 +52,25 @@ ui <- ui <- navbarPage(
     )
   ),
   
+  ## análise paramétrica  -------------------------------------------------
+  tabPanel(
+    title = "Análise Semiparamétrica",
+    sidebarLayout(
+      sidebarPanel(
+        helpText("Escolha e filtre as opções abaixo para visualizar os resultados."),
+        SP1_selecao_ui("SP1_selecao")
+        # mod_selecao_avancada_ui("selecao_avancada")
+      ),
+      mainPanel(
+        navset_tab( 
+          nav_panel(
+            "Modelos",
+            # SP1_selecao_ui("SP1_selecao")
+          )
+        )
+      )
+    )
+  ),
   ## informações ---------------------------------------------------------
   navbarMenu(
     "Sobre",
@@ -60,7 +80,9 @@ ui <- ui <- navbarPage(
 )
 
 server <- function(input, output, session) {
-  # Base de dados reativa
+  
+  ## chamando base de dados reativa -------
+  
   dados <- reactiveFileReader(
     intervalMillis = 5000,  # atualiza a cada 5 segundos
     session = session,
@@ -68,22 +90,29 @@ server <- function(input, output, session) {
     readFunc = arrow::read_parquet
   )
   
-  # layouts --------------------------------------------------------------------
+  ## server inputs nao parametrico -------
+  
   saida_selecao <- 
     mod_selecao_server("selecao", dados)
+  
   saida_selecao_avancada <- 
     mod_selecao_avancada_server("selecao_avancada",
                                 saida_selecao = saida_selecao)
   
+  ## server output nao parametrico -------
   mod_kaplan_meier_server("kaplan_meier", 
                         saida_selecao = saida_selecao,
                         saida_selecao_avancada = saida_selecao_avancada)
+  
   mod_risco_server("risco", 
                         saida_selecao = saida_selecao,
                         saida_selecao_avancada = saida_selecao_avancada)
+  
   mod_log_rank_server("log_rank",
                       saida_selecao_avancada = saida_selecao_avancada)
   
+  ## server modelo semiparametrico -------
+  SP1_selecao_server("SP1_selecao", data = dados)
 }
 
 shinyApp(ui, server)

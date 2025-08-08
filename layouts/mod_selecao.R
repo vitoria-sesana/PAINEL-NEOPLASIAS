@@ -9,15 +9,18 @@ mod_selecao_ui <- function(id) {
     
     ## Input: Cid --------------------------------------------------------------
     selectInput(ns("INPUT_CID"), 
-                "Escolha a variável:",
-                choices = NULL),
+                "Escolha o CID de interesse:",
+                choices = NULL,
+                multiple = TRUE),
     
     ## Input: Covariável -------------------------------------------------------
     selectInput(ns("INPUT_COVARIAVEL"), 
-                "Escolha a variável:",
+                "Escolha a covariável de interesse:",
                 choices = NULL),
+    
     ## ponto de corte
     textOutput(ns("TEXTO_PONTO_DE_CORTE")),
+    
     ## Input: Tipo de tempo ----------------------------------------------------
     radioButtons(ns("INPUT_TEMPO"),
                  "Selecione a unidade de medida da variável tempo de interesse:",
@@ -200,6 +203,9 @@ mod_selecao_server <- function(id, data) {
               max = max_val,
               value = corte_sugerido$estimate, 
               step = 1),
+            
+            ## fácil fechamento -- 
+            easyClose = TRUE,
             
             ## botão de sair do modal
             footer = tagList(
