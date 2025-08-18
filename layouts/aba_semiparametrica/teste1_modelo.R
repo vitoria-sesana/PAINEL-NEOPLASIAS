@@ -11,7 +11,7 @@ names(base)
 # definindo a formula -----------------------------------------------------
 
 
-formula_cox_texto <- "Surv(tempo, indicadora) ~ sexo + idade"
+formula_cox_texto <- "Surv(tempo, indicadora) ~ as.factor(sexo) + idade"
 
 nome_tempo <- base %>% select(tempo_semanas) %>% colnames()
 print(nome_tempo)

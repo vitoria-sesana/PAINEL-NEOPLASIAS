@@ -9,6 +9,7 @@ library(shinyjs)
 library(shinydashboard)
 library(bslib)
 library(plotly)
+library(reactable)
 
 # módulos -----------------------------------------------------------------
 source("layouts/mod_selecao.R")
@@ -17,6 +18,7 @@ source("layouts/mod_kaplan_meier.R")
 source("layouts/mod_risco.R")
 source("layouts/mod_log_rank.R")
 source("layouts/aba_semiparametrica/SP1_selecao.R")
+source("layouts/aba_semiparametrica/SP2_estimativas.R")
 source("layouts/mod_sobre.R")
 source("funcoes_auxiliares/funcao_log_rank.R")
 source("funcoes_auxiliares/funcao_chamar_bases.R")
@@ -64,8 +66,9 @@ ui <- ui <- navbarPage(
       mainPanel(
         navset_tab( 
           nav_panel(
-            "Modelos",
-            # SP1_selecao_ui("SP1_selecao")
+            "Estimativas & Interpretações",
+            h1("Resultados do Modelo de Regressão Cox"),
+            SP2_cox_estimativas_ui("SP2_estimativas")
           )
         )
       )
@@ -112,7 +115,10 @@ server <- function(input, output, session) {
                       saida_selecao_avancada = saida_selecao_avancada)
   
   ## server modelo semiparametrico -------
-  SP1_selecao_server("SP1_selecao", data = dados)
+  saida_cox <- 
+    SP1_selecao_server("SP1_selecao", data = dados)
+  
+  SP2_cox_estimativas_server("SP2_estimativas", saida_cox = saida_cox)
 }
 
 shinyApp(ui, server)
