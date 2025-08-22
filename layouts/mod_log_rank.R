@@ -3,7 +3,7 @@ mod_log_rank_ui <- function(id) {
   
   tagList(
     # Input: tabela log-rank ---------------------------------------------------
-    tableOutput(ns("TABELA_LOG_RANK")),
+    reactableOutput(ns("TABELA_LOG_RANK")),
     
     # Input: texto log-rank 1 classe -------------------------------------------
     textOutput(ns("TEXTO_LOG_RANK"))
@@ -45,8 +45,29 @@ mod_log_rank_server <- function(id, saida_selecao_avancada) {
     })
     
     # Render: tabela log-rank --------------------------------------------------
-    output$TABELA_LOG_RANK <-  renderTable({
-      saida_log_rank()
+    output$TABELA_LOG_RANK <- renderReactable({
+      req(saida_log_rank())
+      reactable(
+        saida_log_rank(),
+        searchable = FALSE,
+        filterable = FALSE,
+        pagination = FALSE,  # Desativa paginação para evitar scroll
+        highlight = TRUE,
+        striped = TRUE,
+        bordered = TRUE,
+        defaultColDef = colDef(
+          style = list(
+            whiteSpace = "normal",     # Quebra linha se necessário
+            overflow = "hidden",       # Oculta overflow
+            textOverflow = "ellipsis"
+          )
+        ),
+        style = list(
+          width = "100%",             # Usa largura total do contêiner
+          overflow = "hidden",        # Remove qualquer scroll
+          boxSizing = "border-box"    # Evita passar da borda
+        )
+      )
     })
     
     # Render: texto log-rank 1 classe ------------------------------------------

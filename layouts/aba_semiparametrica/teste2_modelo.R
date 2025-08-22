@@ -50,7 +50,8 @@ cat("\n=== Modelo 1 (", cov1, ") ===\n", sep="")
 print(summary(m1))
 
 # Tabela de HR (exp(coef)) com IC95%
-ci1 <- confint(m1); hr1 <- exp(coef(m1))
+ci1 <- confint(m1)
+hr1 <- exp(coef(m1))
 hr_tab1 <- data.frame(
   term = names(hr1),
   HR   = as.numeric(hr1),
@@ -169,3 +170,10 @@ ph2 <- cox.zph(m2, transform = "km")
 print(ph2)
 plot(ph2)
 
+
+residuals.coxph(fit4,type="scaledsch")
+
+k <- cox.zph(fit4)
+k; names(k)
+par(mfrow=c(2,2))
+plot(cox.zph(fit4))

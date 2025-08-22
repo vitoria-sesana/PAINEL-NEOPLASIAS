@@ -7,7 +7,7 @@ mod_kaplan_meier_ui <- function(id) {
     # textOutput(ns("aaaa")),
     # tableOutput(ns("TABELA")),
     plotOutput(ns("GRAFICO_KAPLAN_MEIER")),
-    tableOutput(ns("TABELA_KAPLAN_MEIER"))
+    reactableOutput(ns("TABELA_KAPLAN_MEIER"))
   )
 }
 
@@ -174,10 +174,28 @@ mod_kaplan_meier_server <- function(id, saida_selecao, saida_selecao_avancada) {
     
     # TABELA: Kaplan-Meier ----------------------------------------------------
 
-    output$TABELA_KAPLAN_MEIER <- renderTable({
-       head(saida_kaplan_meier()$tabela_kaplan_meier)
+    TABELA_KAPLAN_MEIER <- reactive({
+       x <- saida_kaplan_meier()$tabela_kaplan_meier
+       return(x)
     })
 
-    
+    output$TABELA_KAPLAN_MEIER <- renderReactable({
+      req(TABELA_KAPLAN_MEIER())
+      reactable(
+        TABELA_KAPLAN_MEIER(),
+        searchable = FALSE,
+        filterable = FALSE,
+        pagination = TRUE,
+        highlight = TRUE,
+        striped = TRUE,
+        bordered = TRUE,
+        style = list(
+          maxHeight = "400px",   # ou qualquer valor em px/vh/rem
+          overflowY = "auto"
+        )
+      )
+    })
+      
+      
   })
 }

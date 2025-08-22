@@ -4,7 +4,7 @@ SP1_selecao_ui <- function(id) {
     
     ## Input: Cid --------------------------------------------------------------
     selectInput(ns("INPUT_SP_CID"),
-                "Escolha o CID de interesse:",
+                "Escolha os CID's de interesse:",
                 choices = NULL,
                 multiple = TRUE),
 
@@ -47,9 +47,17 @@ SP1_selecao_server <- function(id, data) {
       cids <- sort(unique(data()[["topogrup"]]))
       updateSelectInput(session, "INPUT_SP_CID", choices = cids, selected = "C38 - Coração, mediastino e pleura")
       
-      ## OBSERVE: colunas para covariavel
-      num_cols <- dicionario_nomes 
-      updateSelectInput(session, "INPUT_SP_COVARIAVEL", choices = num_cols, selected = "sexo")
+      # ## OBSERVE: colunas para covariavel
+      # num_cols <- dicionario_nomes 
+      # updateSelectInput(session, "INPUT_SP_COVARIAVEL", choices = num_cols, selected = "sexo")
+      valid_cols <- dicionario_nomes[
+        sapply(dicionario_nomes, function(col) {
+          col_data <- data()[[col]]
+          length(unique(col_data[!is.na(col_data)])) >= 2
+        })
+      ]
+      
+      updateSelectInput(session, "INPUT_SP_COVARIAVEL", choices = valid_cols, selected = "sexo")
     })
     
     
@@ -80,8 +88,6 @@ SP1_selecao_server <- function(id, data) {
           ", indicadora) ~ ", 
           formula_covariveis()
           )
-      
-      
     })
     
 

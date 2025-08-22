@@ -5,7 +5,7 @@ mod_risco_ui <- function(id) {
   ns <- NS(id)
   tagList(
     plotOutput(ns("GRAFICO_RISCO")),
-    tableOutput(ns("TABELA_RISCO"))
+    reactableOutput(ns("TABELA_RISCO"))
   )
 }
 
@@ -81,10 +81,28 @@ mod_risco_server <- function(id, saida_selecao, saida_selecao_avancada) {
     
     # TABELA: Risco ----------------------------------------------------
     
-    output$TABELA_RISCO <- renderTable({
-      head(saida_risco()$tabela_risco)
+    TABELA_RISCO <- reactive({
+      req(saida_risco()$tabela_risco)
+      tab <- saida_risco()$tabela_risco
+      return(tab)
     })
     
-    
+    output$TABELA_RISCO <- renderReactable({
+      req(saida_risco()$tabela_risco)
+      reactable(
+        saida_risco()$tabela_risco,
+        searchable = FALSE,
+        filterable = FALSE,
+        pagination = TRUE,
+        highlight = TRUE,
+        striped = TRUE,
+        bordered = TRUE,
+        style = list(
+          maxHeight = "400px",   # ou qualquer valor em px/vh/rem
+          overflowY = "auto"
+        )
+      )
+    })
+      
   })
 }

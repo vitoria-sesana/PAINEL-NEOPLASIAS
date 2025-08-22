@@ -111,3 +111,18 @@ left_join(k, y, by = "rowname") %>%
       TRUE ~ "Interpretação não disponível."
     )
   )
+
+# Suponha que seu modelo seja armazenado em 'x'
+# 1. Resíduos de Schoenfeld padronizados
+residuos <- residuals(fit4, type = "scaledsch")
+
+# 2. Teste de proporcionalidade dos riscos
+teste_ph <- cox.zph(fit4)
+
+# 3. Ver resultados do teste
+print(teste_ph)
+
+# 4. Plotar os gráficos para cada covariável
+par(mfrow = c(2, 2))  # Ajusta o layout do gráfico (2 linhas, 2 colunas)
+plot(teste_ph)
+

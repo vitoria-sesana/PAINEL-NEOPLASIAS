@@ -1,3 +1,4 @@
+# bibliotecas -------------------------------------------------------------
 library(shiny)
 library(tidyverse)
 require(survival)
@@ -12,20 +13,32 @@ library(plotly)
 library(reactable)
 
 # módulos -----------------------------------------------------------------
+
+# aba não paramétrica
 source("layouts/mod_selecao.R")
 source("layouts/mod_selecao_avancada.R")
 source("layouts/mod_kaplan_meier.R")
 source("layouts/mod_risco.R")
 source("layouts/mod_log_rank.R")
+
+# aba análise semiparamétrica
 source("layouts/aba_semiparametrica/SP1_selecao.R")
 source("layouts/aba_semiparametrica/SP2_estimativas.R")
+source("layouts/aba_semiparametrica/SP3_riscos_proporcionais.R")
+
+# aba informações gerais
 source("layouts/mod_sobre.R")
+
+# aba funções auxiliares
 source("funcoes_auxiliares/funcao_log_rank.R")
 source("funcoes_auxiliares/funcao_chamar_bases.R")
 source("funcoes_auxiliares/funcao_ponto_de_corte.R")
 
-ui <- ui <- navbarPage(
+
+ui <- navbarPage(
   "Painel Neoplasias",
+  
+# análise não paramétrica -------------------------------------------------
   tabPanel(
     title = "Análise Não Paramétrica",
     sidebarLayout(
@@ -69,6 +82,11 @@ ui <- ui <- navbarPage(
             "Estimativas & Interpretações",
             h1("Resultados do Modelo de Regressão Cox"),
             SP2_cox_estimativas_ui("SP2_estimativas")
+          ),
+          nav_panel(
+            "Riscos Proporcionais",
+            h1("Análise de Riscos Proporcionais"),
+            SP3_riscos_proporcionais_ui("SP3_riscos_proporcionais")
           )
         )
       )
@@ -85,7 +103,6 @@ ui <- ui <- navbarPage(
 server <- function(input, output, session) {
   
   ## chamando base de dados reativa -------
-  
   dados <- reactiveFileReader(
     intervalMillis = 5000,  # atualiza a cada 5 segundos
     session = session,
@@ -119,6 +136,8 @@ server <- function(input, output, session) {
     SP1_selecao_server("SP1_selecao", data = dados)
   
   SP2_cox_estimativas_server("SP2_estimativas", saida_cox = saida_cox)
+  
+  SP3_riscos_proporcionais_server("SP3_riscos_proporcionais", saida_cox = saida_cox)
 }
 
 shinyApp(ui, server)

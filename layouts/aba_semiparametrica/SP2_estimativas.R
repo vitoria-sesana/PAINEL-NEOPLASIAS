@@ -17,11 +17,13 @@ SP2_cox_estimativas_ui <- function(id) {
     ),
     br(),
     # tabela coeficientes -----------------------------------------------------
-    reactableOutput(ns("tabela_coeficientes"))
+    reactableOutput(ns("tabela_coeficientes")),
 
     # tabela intervalo de confiança -------------------------------------------
 
+    hr(),
     
+    plotOutput(ns("grafico_RR"))
     
   )
 }
@@ -135,8 +137,35 @@ SP2_cox_estimativas_server <- function(id, saida_cox) {
         pagination = TRUE,
         highlight = TRUE,
         striped = TRUE,
-        bordered = TRUE
+        bordered = TRUE,
+        style = list(
+          maxHeight = "400px",   # ou qualquer valor em px/vh/rem
+          overflowY = "auto"
+        )
       )
+    })
+    
+    
+    output$grafico_RR <- renderPlot({
+      req(saida_cox())
+      
+      model <- saida_cox()$cox$modelo_cox_ajustado
+      ci2 <- confint(model); hr2 <- exp(coef(model))
+      hr_tab2 <- data.frame(
+        term = names(hr2),
+        HR   = as.numeric(hr2),
+        L95  = exp(ci2[,1]),
+        U95  = exp(ci2[,2])
+      )
+      
+      ggplot(hr_tab2, aes(y = term, x = HR)) +
+        geom_point() +
+        geom_errorbarh(aes(xmin = L95, xmax = U95), height = 0.15) +
+        geom_vline(xintercept = 1, linetype = "dashed") +
+        labs(title = "Forest plot – Cox (2 covariáveis)",
+             x = "Hazard Ratio (IC 95%)", y = NULL) +
+        theme_bw()
+      
     })
   })
 }

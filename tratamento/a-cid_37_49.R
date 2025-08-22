@@ -9,7 +9,6 @@ require(foreign)
 # leitura do arquivo dbf --------------------------------------------------
 dados_sem_filtro <- read.dbf("tratamento/pacigeral.dbf", as.is = F)
 
-
 # encoding ----------------------------------------------------------------
 dados_sem_filtro[] <- lapply(dados_sem_filtro, function(x) {
   if (is.character(x) | is.factor(x)) iconv(x, from = "UTF-8", to = "latin1") else x

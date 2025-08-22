@@ -30,7 +30,15 @@ x <-
 
 names(x)
 
-x
+modelo_cox <- x
 
-summary(x)
+# Testar a suposição de riscos proporcionais
+teste_schoenfeld <- cox.zph(modelo_cox) 
+resultado <- teste_schoenfeld$table %>% as.data.frame() %>% rownames_to_column()
+colnames(resultado) <- c("Covariável", "Estatística", "Graus de liberdade", "P-valor")
+
+# Ver os resultados
+print(resultado)
+
+as.data.frame(teste_schoenfeld$table)
 

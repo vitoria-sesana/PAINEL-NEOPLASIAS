@@ -201,8 +201,8 @@ mod_selecao_server <- function(id, data) {
               value = corte_sugerido$estimate, 
               step = 1),
             
-            ## fácil fechamento -- 
-            easyClose = TRUE,
+            ## fácil fechamento NEGADO -- 
+            easyClose = FALSE,
             
             ## botão de sair do modal
             footer = tagList(
