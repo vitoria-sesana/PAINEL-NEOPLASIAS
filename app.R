@@ -15,11 +15,11 @@ library(reactable)
 # módulos -----------------------------------------------------------------
 
 # aba não paramétrica
-source("layouts/mod_selecao.R")
-source("layouts/mod_selecao_avancada.R")
-source("layouts/mod_kaplan_meier.R")
-source("layouts/mod_risco.R")
-source("layouts/mod_log_rank.R")
+source("layouts/aba_nao_parametrica/mod_selecao.R")
+source("layouts/aba_nao_parametrica/mod_selecao_avancada.R")
+source("layouts/aba_nao_parametrica/mod_kaplan_meier.R")
+source("layouts/aba_nao_parametrica/mod_risco.R")
+source("layouts/aba_nao_parametrica/mod_log_rank.R")
 
 # aba análise semiparamétrica
 source("layouts/aba_semiparametrica/SP1_selecao.R")
@@ -27,7 +27,7 @@ source("layouts/aba_semiparametrica/SP2_estimativas.R")
 source("layouts/aba_semiparametrica/SP3_riscos_proporcionais.R")
 
 # aba informações gerais
-source("layouts/mod_sobre.R")
+source("layouts/aba_sobre/mod_sobre.R")
 
 # aba funções auxiliares
 source("funcoes_auxiliares/funcao_log_rank.R")
@@ -131,10 +131,11 @@ server <- function(input, output, session) {
   mod_log_rank_server("log_rank",
                       saida_selecao_avancada = saida_selecao_avancada)
   
-  ## server modelo semiparametrico -------
+  ## server input semiparametrico -------
   saida_cox <- 
     SP1_selecao_server("SP1_selecao", data = dados)
   
+  ## server output semiparametrico -------
   SP2_cox_estimativas_server("SP2_estimativas", saida_cox = saida_cox)
   
   SP3_riscos_proporcionais_server("SP3_riscos_proporcionais", saida_cox = saida_cox)

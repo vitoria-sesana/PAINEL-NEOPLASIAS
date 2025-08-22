@@ -4,6 +4,11 @@
 mod_risco_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    div(
+      style = "font-weight: bold; font-size: 24px; text-align: left;",
+      textOutput(ns("texto_risco"))
+    ),
+    br(),
     plotOutput(ns("GRAFICO_RISCO")),
     reactableOutput(ns("TABELA_RISCO"))
   )
@@ -13,6 +18,11 @@ mod_risco_ui <- function(id) {
 
 mod_risco_server <- function(id, saida_selecao, saida_selecao_avancada) {
   moduleServer(id, function(input, output, session) {
+    
+    output$texto_risco <- renderText({
+      
+      "Resultado da função de risco estimada"
+    })
     
     # CALCULO: risco --------------------------------------------------------
 

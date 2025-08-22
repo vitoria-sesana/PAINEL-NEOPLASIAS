@@ -5,6 +5,6 @@ account: vitoria-sesana
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 15120605
-bundleId: 10804172
+bundleId: 10806470
 url: https://vitoria-sesana.shinyapps.io/painel-neoplasias/
 version: 1

@@ -2,6 +2,12 @@ mod_log_rank_ui <- function(id) {
   ns <- NS(id)
   
   tagList(
+    div(
+      style = "font-weight: bold; font-size: 24px; text-align: left;",
+      textOutput(ns("texto_tabela_lg"))
+    ),
+    br(),
+    
     # Input: tabela log-rank ---------------------------------------------------
     reactableOutput(ns("TABELA_LOG_RANK")),
     
@@ -14,6 +20,13 @@ mod_log_rank_ui <- function(id) {
 
 mod_log_rank_server <- function(id, saida_selecao_avancada) {
   moduleServer(id, function(input, output, session) {
+    
+    
+    
+    output$texto_tabela_lg <- renderText({
+      
+      "Resultado do teste de log-rank"
+    })
     
     # Reactive: base para tabela log-rank --------------------------------------
     saida_log_rank <- reactive({

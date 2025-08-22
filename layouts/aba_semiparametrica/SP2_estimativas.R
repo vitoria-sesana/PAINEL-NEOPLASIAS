@@ -5,11 +5,11 @@ SP2_cox_estimativas_ui <- function(id) {
     hr(),
 
     # formula -----------------------------------------------------------------
-    div(
-      style = "font-weight: bold; font-size: 24px; text-align: center;",
-      textOutput(ns("texto_formula"))
-    ),
-    hr(),
+    # div(
+    #   style = "font-weight: bold; font-size: 24px; text-align: center;",
+    #   textOutput(ns("texto_formula"))
+    # ),
+    # hr(),
     
     div(
       style = "font-weight: bold; font-size: 16px; text-align: left;",

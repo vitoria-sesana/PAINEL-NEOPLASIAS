@@ -8,7 +8,7 @@ SP1_selecao_ui <- function(id) {
                 choices = NULL,
                 multiple = TRUE),
 
-    textOutput(ns("texto_aaa")),
+    #textOutput(ns("texto_aaa")),
     ## INPUT: Seleção das covariaveis ------
     
     selectInput(ns("INPUT_SP_COVARIAVEL"), 

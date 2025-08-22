@@ -6,6 +6,12 @@ mod_kaplan_meier_ui <- function(id) {
   tagList(
     # textOutput(ns("aaaa")),
     # tableOutput(ns("TABELA")),
+    div(
+      style = "font-weight: bold; font-size: 24px; text-align: left;",
+      textOutput(ns("texto_tabela_kp"))
+    ),
+    br(),
+    
     plotOutput(ns("GRAFICO_KAPLAN_MEIER")),
     reactableOutput(ns("TABELA_KAPLAN_MEIER"))
   )
@@ -15,6 +21,11 @@ mod_kaplan_meier_ui <- function(id) {
 
 mod_kaplan_meier_server <- function(id, saida_selecao, saida_selecao_avancada) {
   moduleServer(id, function(input, output, session) {
+    
+    output$texto_tabela_kp <- renderText({
+      
+      "Resultado do ajuste de Kaplan-Meier: Gráfico e Tabela"
+    })
     
     ## teste ################
     output$aaaa <- renderText(
