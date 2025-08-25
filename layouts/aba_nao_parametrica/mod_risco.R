@@ -4,13 +4,23 @@
 mod_risco_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    br(),
     div(
       style = "font-weight: bold; font-size: 24px; text-align: left;",
       textOutput(ns("texto_risco"))
     ),
     br(),
+    "A função de risco descreve a taxa instantânea de ocorrência de um evento em um determinado ponto no tempo, dado que o indivíduo sobrevive até esse momento, o gráfico ajuda a entender o comportamento do evento ao longo do tempo.",
+    br(),
+    br(),
     plotOutput(ns("GRAFICO_RISCO")),
-    reactableOutput(ns("TABELA_RISCO"))
+    br(),
+    "A tabela da função de risco também detalha a visualizar o comportamento do risco ao longo do tempo e entender quando o risco de um evento ocorre de forma mais intensa.",
+    br(),
+    br(),
+    reactableOutput(ns("TABELA_RISCO")),
+    br(),
+    br()
   )
 }
 
@@ -80,12 +90,11 @@ mod_risco_server <- function(id, saida_selecao, saida_selecao_avancada) {
       ggplot(tabela_risco, aes(x = tempo, y = risco, color = grupo)) +
         geom_line(size = 1) +
         labs(
-          title = paste("Função de Risco Estimada por",saida_selecao$covariavel_selecionada() ),
           x = saida_selecao$nome_tempo(),
           y = "Função de Risco"
         ) +
         theme_minimal() +
-        theme(legend.title = element_blank())
+        theme(legend.title = element_blank(), title = element_blank())
 
     })
     
@@ -94,15 +103,19 @@ mod_risco_server <- function(id, saida_selecao, saida_selecao_avancada) {
     TABELA_RISCO <- reactive({
       req(saida_risco()$tabela_risco)
       tab <- saida_risco()$tabela_risco
-      return(tab)
+      
+      tab2 <- tab %>% 
+        mutate(risco = round(risco, 4)) %>% 
+        rename(Tempo = tempo, Risco = risco, Grupo = grupo)
+      return(tab2)
     })
     
     output$TABELA_RISCO <- renderReactable({
-      req(saida_risco()$tabela_risco)
+      req(TABELA_RISCO())
       reactable(
-        saida_risco()$tabela_risco,
-        searchable = FALSE,
-        filterable = FALSE,
+        TABELA_RISCO(),
+        searchable = TRUE,
+        filterable = TRUE,
         pagination = TRUE,
         highlight = TRUE,
         striped = TRUE,

@@ -2,15 +2,19 @@ mod_log_rank_ui <- function(id) {
   ns <- NS(id)
   
   tagList(
+    br(),
     div(
       style = "font-weight: bold; font-size: 24px; text-align: left;",
       textOutput(ns("texto_tabela_lg"))
     ),
     br(),
-    
+    "O teste de Log-Rank é utilizado para comparar as curvas de sobrevivência entre dois ou mais grupos, verificando se há diferenças estatisticamente significativas na probabilidade de ocorrência do evento ao longo do tempo. Como em casos onde não há mudança brusca na probabilidade de sobrevivência entre grupos.",
+    br(),
+    br(),
     # Input: tabela log-rank ---------------------------------------------------
     reactableOutput(ns("TABELA_LOG_RANK")),
-    
+    br(),
+    "Rejeita-se a hipótese nula e conclui-se que as curvas de sobrevivência são significativamente diferentes quando o valor-p do teste de Log-Rank é menor que 0,05.",
     # Input: texto log-rank 1 classe -------------------------------------------
     textOutput(ns("TEXTO_LOG_RANK"))
   )
@@ -64,21 +68,13 @@ mod_log_rank_server <- function(id, saida_selecao_avancada) {
         saida_log_rank(),
         searchable = FALSE,
         filterable = FALSE,
-        pagination = FALSE,  # Desativa paginação para evitar scroll
+        pagination = TRUE,
         highlight = TRUE,
         striped = TRUE,
         bordered = TRUE,
-        defaultColDef = colDef(
-          style = list(
-            whiteSpace = "normal",     # Quebra linha se necessário
-            overflow = "hidden",       # Oculta overflow
-            textOverflow = "ellipsis"
-          )
-        ),
         style = list(
-          width = "100%",             # Usa largura total do contêiner
-          overflow = "hidden",        # Remove qualquer scroll
-          boxSizing = "border-box"    # Evita passar da borda
+          maxHeight = "400px",   # ou qualquer valor em px/vh/rem
+          overflowY = "auto"
         )
       )
     })

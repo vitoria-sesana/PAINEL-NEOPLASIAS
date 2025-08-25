@@ -6,7 +6,7 @@ mod_selecao_ui <- function(id) {
     
     ## Input: Cid --------------------------------------------------------------
     selectInput(ns("INPUT_CID"), 
-                "Escolha o CID de interesse:",
+                "Escolha os CID's de interesse:",
                 choices = NULL,
                 multiple = TRUE),
     
@@ -17,6 +17,7 @@ mod_selecao_ui <- function(id) {
     
     ## ponto de corte
     textOutput(ns("TEXTO_PONTO_DE_CORTE")),
+    br(),
     
     ## Input: Tipo de tempo ----------------------------------------------------
     radioButtons(ns("INPUT_TEMPO"),

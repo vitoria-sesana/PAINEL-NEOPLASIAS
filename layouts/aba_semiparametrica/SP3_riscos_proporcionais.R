@@ -1,8 +1,15 @@
 SP3_riscos_proporcionais_ui <- function(id) {
   ns <- NS(id)
   tagList(
+    br(),
+    div(
+      style = "font-weight: bold; font-size: 24px; text-align: left;",
+      textOutput(ns("texto_tabela_ar"))
+    ),
+    br(),
     "A suposição de riscos proporcionais significa que o efeito das covariáveis sobre o risco é constante ao longo do tempo — ou seja, a razão de riscos entre dois indivíduos não muda com o tempo.",
-    # uiOutput(ns("analise_riscos")),
+    br(),
+    br(),
     reactableOutput(ns("tabela_riscos_proporcionais")),
   )
 }
@@ -10,6 +17,11 @@ SP3_riscos_proporcionais_ui <- function(id) {
 SP3_riscos_proporcionais_server <- function(id, saida_cox) {
   moduleServer(id, function(input, output, session) {
     ns <- session$ns
+    
+    output$texto_tabela_ar <- renderText({
+      
+      "Análises das suposições de riscos proporcionais"
+    })
     
     tabela_riscos_proporcionais <- reactive({
       req(saida_cox())
@@ -20,6 +32,10 @@ SP3_riscos_proporcionais_server <- function(id, saida_cox) {
       resultado <- teste_schoenfeld$table %>% as.data.frame() %>% rownames_to_column()
       colnames(resultado) <- c("Covariável", "Estatística", "Graus de liberdade", "P-valor")
       
+      resultado <- resultado %>% 
+        mutate(`Estatística` = round(`Estatística`, 4),
+               `P-valor` = round(`P-valor`, 4)
+               )
       return(resultado)
     })
     

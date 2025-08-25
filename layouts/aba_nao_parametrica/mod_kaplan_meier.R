@@ -6,13 +6,20 @@ mod_kaplan_meier_ui <- function(id) {
   tagList(
     # textOutput(ns("aaaa")),
     # tableOutput(ns("TABELA")),
+    br(),
     div(
       style = "font-weight: bold; font-size: 24px; text-align: left;",
       textOutput(ns("texto_tabela_kp"))
     ),
     br(),
-    
+    "O gráfico de Kaplan-Meier é uma ótima ferramenta na análise de sobrevivência, com ela é possível visualizar o decaimento da probabilidade de sobrevivência de um evento de interesse, no caso óbito do paciente, ao longo do tempo. Quanto mais acelerado é o decaimento, menor é a probabilidade de sobreviência em um determinado período de tempo.",
+    br(),
+    br(),
     plotOutput(ns("GRAFICO_KAPLAN_MEIER")),
+    br(),
+    "A tabela de Kaplan-Meier detalha a estimativa de sobrevivência em diferentes pontos no tempo, com base no número de indivíduos em risco e o número de eventos observados.",
+    br(),
+    br(),
     reactableOutput(ns("TABELA_KAPLAN_MEIER"))
   )
 }
@@ -130,11 +137,7 @@ mod_kaplan_meier_server <- function(id, saida_selecao, saida_selecao_avancada) {
           gg_kp$plot +
           scale_y_continuous(
             limits = c(0, 1),
-            breaks =
-              seq(
-                from = min(saida_selecao_avancada$data_selecionada_avancada()$tempo, na.rm = TRUE),
-                to = max(saida_selecao_avancada$data_selecionada_avancada()$tempo, na.rm = TRUE),
-                length.out = 7)
+            breaks = seq(0, 1, by = 0.25)
           ) +
           scale_x_continuous(
             limits = c(0, max(saida_selecao_avancada$data_selecionada_avancada()$tempo))
@@ -163,11 +166,7 @@ mod_kaplan_meier_server <- function(id, saida_selecao, saida_selecao_avancada) {
           gg_kp$plot +
           scale_y_continuous(
             limits = c(0, 1),
-            breaks =
-              seq(
-                from = min(saida_selecao_avancada$data_selecionada_avancada()$tempo, na.rm = TRUE),
-                to = max(saida_selecao_avancada$data_selecionada_avancada()$tempo, na.rm = TRUE),
-                length.out = 7)
+            breaks = seq(0, 1, by = 0.25)
           ) +
           scale_x_continuous(
             limits = c(0, max(saida_selecao_avancada$data_selecionada_avancada()$tempo))
@@ -187,6 +186,7 @@ mod_kaplan_meier_server <- function(id, saida_selecao, saida_selecao_avancada) {
 
     TABELA_KAPLAN_MEIER <- reactive({
        x <- saida_kaplan_meier()$tabela_kaplan_meier
+       x <- rename(x, "Grupo" = "Covariável")
        return(x)
     })
 
@@ -194,8 +194,8 @@ mod_kaplan_meier_server <- function(id, saida_selecao, saida_selecao_avancada) {
       req(TABELA_KAPLAN_MEIER())
       reactable(
         TABELA_KAPLAN_MEIER(),
-        searchable = FALSE,
-        filterable = FALSE,
+        searchable = TRUE,
+        filterable = TRUE,
         pagination = TRUE,
         highlight = TRUE,
         striped = TRUE,

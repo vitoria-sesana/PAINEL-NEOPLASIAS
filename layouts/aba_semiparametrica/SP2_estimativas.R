@@ -2,7 +2,7 @@ SP2_cox_estimativas_ui <- function(id) {
   ns <- NS(id)
   tagList(
 
-    hr(),
+    br(),
 
     # formula -----------------------------------------------------------------
     # div(
@@ -12,19 +12,32 @@ SP2_cox_estimativas_ui <- function(id) {
     # hr(),
     
     div(
-      style = "font-weight: bold; font-size: 16px; text-align: left;",
+      style = "font-weight: bold; font-size: 24px; text-align: left;",
       textOutput(ns("texto_tabela"))
     ),
+    br(),
+    "O modelo de regressão de Cox é utilizado na análise de sobrevivência para entender a relação entre uma variável dependente de tempo e várias covariáveis. Ele é baseado no conceito de riscos proporcionais, onde o risco de um evento ocorrer em um determinado momento depende de características (covariáveis) dos indivíduos.",
+    h3("Razão de Risco (RR) e sua interpretação:"),
+    "A Razão de Risco (RR) é a medida mais importante no modelo de Cox. Ela representa a taxa de risco de ocorrência de um evento para um grupo comparado a outro, dada a covariável.",
+    tags$ul(
+      tags$li("RR = 1: Não há diferença no risco entre os grupos."),
+      tags$li("RR > 1: O risco do evento aumenta à medida que a covariável aumenta."),
+      tags$li("RR < 1: O risco do evento diminui à medida que a covariável aumenta.")
+    ),
+    br(),
     br(),
     # tabela coeficientes -----------------------------------------------------
     reactableOutput(ns("tabela_coeficientes")),
 
     # tabela intervalo de confiança -------------------------------------------
-
     hr(),
-    
-    plotOutput(ns("grafico_RR"))
-    
+    br(),
+    "O Forest Plot é uma representação gráfica comumente usada para visualizar os resultados de modelos de regressão de Cox e outras análises estatísticas. Ele é frequentemente utilizado para mostrar a Razão de Risco (RR), juntamente com os intervalos de confiança (IC), permitindo uma comparação rápida dos efeitos das covariáveis em diferentes grupos ou estudos.",
+    br(),
+    br(),
+    plotOutput(ns("grafico_RR")),
+    br(),
+    br(),
   )
 }
 
@@ -110,7 +123,7 @@ SP2_cox_estimativas_server <- function(id, saida_cox) {
           z,
           pr_z,
           interpretacao
-        ) 
+        )  
       
       colnames(tabela_final) <-
         c(
@@ -120,7 +133,7 @@ SP2_cox_estimativas_server <- function(id, saida_cox) {
           "RR",
           "1/RR",
           "IC(RR, 95%)",
-          "Z",
+          "Estatística",
           "P-Valor",
           "Interpretação"
           )
@@ -162,8 +175,8 @@ SP2_cox_estimativas_server <- function(id, saida_cox) {
         geom_point() +
         geom_errorbarh(aes(xmin = L95, xmax = U95), height = 0.15) +
         geom_vline(xintercept = 1, linetype = "dashed") +
-        labs(title = "Forest plot – Cox (2 covariáveis)",
-             x = "Hazard Ratio (IC 95%)", y = NULL) +
+        labs(title = "",
+             x = "Razão de Risco (IC 95%)", y = NULL) +
         theme_bw()
       
     })
